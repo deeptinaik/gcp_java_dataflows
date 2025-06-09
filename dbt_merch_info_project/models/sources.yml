@@ -1,0 +1,121 @@
+version: 2
+
+sources:
+  - name: cnsmp_layer
+    description: "Consumption layer tables"
+    tables:
+      - name: dimension_merch_info
+        description: "Source table for merchant dimension information"
+        columns:
+          - name: merchant_number
+            description: "Unique merchant identifier"
+          - name: etlbatchid
+            description: "ETL batch identifier"
+          - name: current_ind
+            description: "Current indicator flag"
+          - name: purge_flag
+            description: "Purge flag indicator"
+            
+      - name: merchant_geo_location
+        description: "Merchant geographical location reference"
+        columns:
+          - name: corporate
+            description: "Corporate identifier"
+          - name: region
+            description: "Region identifier"
+          - name: geographical_region
+            description: "Geographical region code"
+
+  - name: cnsmp_layer_sensitive
+    description: "Consumption layer sensitive tables"
+    tables:
+      - name: master_merch_info
+        description: "Master merchant information table"
+        columns:
+          - name: merchant_number
+            description: "Unique merchant identifier"
+          - name: cdc_hash_key
+            description: "Change data capture hash key"
+          - name: current_ind
+            description: "Current indicator flag"
+          - name: acquirer_name
+            description: "Acquirer name"
+
+  - name: xl_layer
+    description: "Extract layer tables"
+    tables:
+      - name: ukrg_mmfndeu_supplement_funding
+        description: "UKRG funding supplement data"
+      - name: ap_mmddsq_dda_tbl
+        description: "AP DDA table data"
+      - name: ca_mmddsq_dda_tbl
+        description: "CA DDA table data"
+      - name: us_mmddsq_dda_tbl
+        description: "US DDA table data"
+      - name: indir_mmddsq_dda_tbl
+        description: "Indirect DDA table data"
+      - name: ukrg_mmownq_own
+        description: "UKRG owner data"
+      - name: ap_mmownq_own
+        description: "AP owner data"
+      - name: ca_mmownq_own
+        description: "CA owner data"
+      - name: us_mmownq_own
+        description: "US owner data"
+      - name: indir_mmownq_own
+        description: "Indirect owner data"
+      - name: ukrg_mmidxsq_idx
+        description: "UKRG index data"
+      - name: ap_mmidxsq_idx
+        description: "AP index data"
+      - name: ca_mmidxsq_idx
+        description: "CA index data"
+      - name: us_mmidxsq_idx
+        description: "US index data"
+      - name: indir_mmidxsq_idx
+        description: "Indirect index data"
+
+  - name: tl_layer_sens
+    description: "Transform layer sensitive tables"
+    tables:
+      - name: ukrg_mmfndeu_supplement_funding
+        description: "UKRG funding supplement sensitive data"
+      - name: ap_mmddsq_dda_tbl
+        description: "AP DDA sensitive data"
+      - name: ca_mmddsq_dda_tbl
+        description: "CA DDA sensitive data"
+      - name: us_mmddsq_dda_tbl
+        description: "US DDA sensitive data"
+      - name: indir_mmddsq_dda_tbl
+        description: "Indirect DDA sensitive data"
+      - name: ukrg_mmownq_own
+        description: "UKRG owner sensitive data"
+      - name: ap_mmownq_own
+        description: "AP owner sensitive data"
+      - name: ca_mmownq_own
+        description: "CA owner sensitive data"
+      - name: us_mmownq_own
+        description: "US owner sensitive data"
+      - name: indir_mmownq_own
+        description: "Indirect owner sensitive data"
+      - name: ukrg_mmidxsq_idx
+        description: "UKRG index sensitive data"
+      - name: ap_mmidxsq_idx
+        description: "AP index sensitive data"
+      - name: ca_mmidxsq_idx
+        description: "CA index sensitive data"
+      - name: us_mmidxsq_idx
+        description: "US index sensitive data"
+      - name: indir_mmidxsq_idx
+        description: "Indirect index sensitive data"
+
+  - name: configuration
+    description: "Configuration tables"
+    tables:
+      - name: max_etl_config
+        description: "Maximum ETL batch configuration"
+        columns:
+          - name: process
+            description: "Process name"
+          - name: max_etlbatchid
+            description: "Maximum ETL batch ID"

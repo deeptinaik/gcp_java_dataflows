@@ -1,0 +1,47 @@
+name: 'merch_info_dbt'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'merch_info_dbt'
+
+# These configurations specify where dbt should look for different types of files.
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Configuring models
+models:
+  merch_info_dbt:
+    # Staging models - views for performance
+    staging:
+      +materialized: view
+      +schema: staging
+    
+    # Intermediate models - views for performance
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+    
+    # Marts - final output tables
+    marts:
+      +materialized: table
+      +schema: marts
+
+# Global variables for the project
+vars:
+  source_etlbatchid: "{{ var('source_etlbatchid', 0) }}"
+  etlbatchid: "{{ var('etlbatchid', 0) }}"
+
+# Tests
+tests:
+  +store_failures: true
+  +severity: warn
