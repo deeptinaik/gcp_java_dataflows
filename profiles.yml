@@ -1,0 +1,38 @@
+# DBT Profile Configuration
+# This file configures connection details for different environments
+
+customer_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: "{{ var('source_project') }}"
+      dataset: "{{ var('target_dataset') }}_dev"
+      threads: 4
+      timeout_seconds: 300
+      location: US
+      priority: interactive
+      retries: 1
+      
+    staging:
+      type: bigquery
+      method: service-account
+      project: "{{ var('source_project') }}"
+      dataset: "{{ var('target_dataset') }}_staging"
+      threads: 4
+      timeout_seconds: 300
+      location: US
+      priority: interactive
+      retries: 1
+      
+    production:
+      type: bigquery
+      method: service-account
+      project: "{{ var('source_project') }}"
+      dataset: "{{ var('target_dataset') }}"
+      threads: 8
+      timeout_seconds: 600
+      location: US
+      priority: interactive
+      retries: 2
