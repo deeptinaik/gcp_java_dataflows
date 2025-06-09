@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: stg_dimension_merch_info_temp
+    description: "Staging table for dimension merchant info with filtering"
+    columns:
+      - name: merchant_number
+        description: "Unique merchant identifier"
+        tests:
+          - not_null
+      - name: current_ind
+        description: "Current indicator flag"
+        tests:
+          - accepted_values:
+              values: ['0', '1']
+      - name: purge_flag
+        description: "Purge flag indicator"
+        tests:
+          - accepted_values:
+              values: ['Y', 'N']
+
+  - name: int_youcm_gppn_temp
+    description: "Intermediate transformation with business logic"
+    columns:
+      - name: merchant_number
+        description: "Unique merchant identifier"
+        tests:
+          - not_null
+          - unique
+      - name: change_data_capture_hash
+        description: "Hash for change data capture"
+        tests:
+          - not_null
+      - name: update_insert_flag
+        description: "Flag indicating if record needs update/insert"
+        tests:
+          - accepted_values:
+              values: [0, 1]
+
+  - name: master_merch_info
+    description: "Final master merchant information table"
+    columns:
+      - name: master_merch_info_sk
+        description: "Surrogate key for master merchant info"
+        tests:
+          - not_null
+          - unique
+      - name: merchant_number
+        description: "Unique merchant identifier"
+        tests:
+          - not_null
+      - name: acquirer_name
+        description: "Acquirer name - should always be GPN"
+        tests:
+          - accepted_values:
+              values: ['GPN']
+      - name: geographical_region
+        description: "Geographical region code"
+        tests:
+          - not_null
+      - name: merchant_status
+        description: "Merchant status code"
+        tests:
+          - accepted_values:
+              values: ['CLOSED', 'INACTIVE', 'OPEN', 'PENDING', 'UNKNOWN']

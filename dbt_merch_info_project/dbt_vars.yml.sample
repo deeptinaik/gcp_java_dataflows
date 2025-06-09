@@ -1,0 +1,10 @@
+# Sample variable values for the DBT project
+# Copy this file to dbt_vars.yml and modify values as needed
+
+source_etlbatchid: 12345
+etlbatchid: 67890
+
+# Example usage:
+# dbt run --vars source_etlbatchid:12345 --vars etlbatchid:67890
+# or 
+# dbt run --var-file dbt_vars.yml
