@@ -1,0 +1,50 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: Raw data sources representing BigQuery tables accessed by the original Dataflow pipeline
+    
+    tables:
+      - name: child_table
+        description: >
+          Child table containing records for soft delete processing.
+          This represents the table accessed via options.getChildTableDescription() in the original pipeline.
+        
+        columns:
+          - name: merchant_number
+            description: Merchant identifier
+            tests:
+              - not_null
+          
+          - name: child_record_id
+            description: Unique identifier for child records
+            tests:
+              - not_null
+              - unique
+          
+          - name: current_ind
+            description: >
+              Current indicator flag for soft delete logic.
+              0 = inactive/deleted, 1 = active/current
+            tests:
+              - not_null
+              - accepted_values:
+                  values: ['0', '1']
+          
+          - name: dw_update_date_time
+            description: >
+              Data warehouse update timestamp.
+              Updated when soft delete operations are performed.
+            tests:
+              - not_null
+          
+          - name: record_type
+            description: Type classification of the child record
+          
+          - name: created_date
+            description: Original creation date of the record
+            tests:
+              - not_null
+          
+          - name: created_by
+            description: User or system that created the record

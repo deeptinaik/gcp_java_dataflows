@@ -1,0 +1,82 @@
+version: 2
+
+models:
+  - name: child_table_soft_delete_monthly
+    description: >
+      Final processed child table with soft delete logic applied.
+      This model replicates the complete functionality of the Adhoc_Monthly_SD_Child Dataflow pipeline.
+    
+    columns:
+      - name: child_record_id
+        description: Unique identifier for child records
+        tests:
+          - not_null
+          - unique
+      
+      - name: merchant_number
+        description: Merchant identifier
+        tests:
+          - not_null
+      
+      - name: current_ind
+        description: >
+          Current indicator after soft delete processing.
+          Updated by the soft delete logic: 0=inactive, 1=active
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['0', '1']
+      
+      - name: dw_update_date_time
+        description: >
+          Data warehouse update timestamp.
+          Updated when soft delete transformations are applied.
+        tests:
+          - not_null
+      
+      - name: processing_timestamp
+        description: Timestamp when the DBT model was processed
+        tests:
+          - not_null
+      
+      - name: record_hash
+        description: Hash value for change data capture and data integrity validation
+        tests:
+          - not_null
+      
+      - name: record_type
+        description: Type classification of the child record
+        tests:
+          - not_null
+      
+      - name: amount
+        description: Transaction or record amount
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+              config:
+                severity: warn
+    
+    tests:
+      # Table-level tests to ensure data quality
+      - dbt_utils.expression_is_true:
+          expression: "count(*) > 0"
+          config:
+            severity: error
+            error_if: ">10"
+      
+      # Ensure processing timestamp is recent (within last day)
+      - dbt_utils.expression_is_true:
+          expression: "max(processing_timestamp) >= current_timestamp() - interval '1 day'"
+          config:
+            severity: warn
+      
+      # Verify soft delete logic: records with current_ind=1 should have recent dw_update_date_time
+      - dbt_utils.expression_is_true:
+          expression: >
+            count(case when current_ind = '1' 
+                      and try_to_timestamp(dw_update_date_time) < current_timestamp() - interval '30 days' 
+                      then 1 end) = 0
+          config:
+            severity: warn

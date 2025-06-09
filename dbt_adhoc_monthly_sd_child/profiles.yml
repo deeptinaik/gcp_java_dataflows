@@ -1,0 +1,41 @@
+adhoc_monthly_sd_child:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE') | default('ANALYST_ROLE') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE') | default('DEV_DB') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') | default('DEV_WH') }}"
+      schema: "{{ env_var('SNOWFLAKE_SCHEMA') | default('ADHOC_SD_CHILD') }}"
+      threads: 4
+      client_session_keep_alive: False
+      query_tag: dbt_adhoc_monthly_sd_child
+      
+    staging:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE') | default('ANALYST_ROLE') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE') | default('STAGING_DB') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') | default('STAGING_WH') }}"
+      schema: "{{ env_var('SNOWFLAKE_SCHEMA') | default('ADHOC_SD_CHILD') }}"
+      threads: 8
+      client_session_keep_alive: False
+      query_tag: dbt_adhoc_monthly_sd_child_staging
+      
+    prod:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE') | default('PROD_ROLE') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE') | default('PROD_DB') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') | default('PROD_WH') }}"
+      schema: "{{ env_var('SNOWFLAKE_SCHEMA') | default('ADHOC_SD_CHILD') }}"
+      threads: 16
+      client_session_keep_alive: True
+      query_tag: dbt_adhoc_monthly_sd_child_prod

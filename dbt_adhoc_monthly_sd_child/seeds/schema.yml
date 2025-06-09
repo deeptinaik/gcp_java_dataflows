@@ -1,0 +1,37 @@
+version: 2
+
+seeds:
+  - name: sample_child_table_data
+    description: >
+      Sample data for testing the soft delete pipeline conversion.
+      Includes various scenarios for testing current_ind and dw_update_date_time logic.
+    
+    config:
+      column_types:
+        merchant_number: varchar(50)
+        child_record_id: varchar(50)
+        record_type: varchar(50)
+        current_ind: varchar(1)
+        dw_update_date_time: varchar(50)
+        created_date: varchar(50)
+        created_by: varchar(50)
+        parent_id: varchar(50)
+        status: varchar(50)
+        description: varchar(200)
+        amount: decimal(10,2)
+        currency_code: varchar(3)
+    
+    columns:
+      - name: child_record_id
+        description: Unique identifier for each child record
+        tests:
+          - unique
+          - not_null
+      
+      - name: current_ind
+        description: >
+          Test data includes both '0' and '1' values to test soft delete logic.
+          Records with '0' should be processed by the transformation.
+        tests:
+          - accepted_values:
+              values: ['0', '1']

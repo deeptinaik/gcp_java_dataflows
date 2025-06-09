@@ -1,0 +1,49 @@
+name: 'adhoc_monthly_sd_child'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'adhoc_monthly_sd_child'
+
+# These configurations specify where dbt should look for different types of files.
+# The `model-paths` config, for example, states that models in this project can be
+# found in the "models/" directory. You probably won't need to change these!
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+# Configuring models
+# Full documentation: https://docs.getdbt.com/docs/configuring-models
+models:
+  adhoc_monthly_sd_child:
+    # Configuration for all models in this project
+    +materialized: table
+    
+    staging:
+      # Configuration for staging models
+      +materialized: view
+    
+    marts:
+      # Configuration for mart models
+      +materialized: table
+
+# Global variables that can be referenced in models
+vars:
+  # Default values for common fields
+  current_timestamp_format: 'yyyy-MM-dd HH:mm:ss'
+  date_format: 'yyyy-MM-dd'
+  current_ind_active: '1'
+  current_ind_inactive: '0'
+
+# Test configurations
+tests:
+  +store_failures: true
+  +schema_tests: true
