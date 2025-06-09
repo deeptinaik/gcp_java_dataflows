@@ -1,0 +1,45 @@
+# DBT Project Configuration
+# This file contains the main configuration for the DBT project
+
+name: 'customer_analytics_dbt'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'customer_analytics'
+
+# These configurations specify where dbt should look for different types of files.
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+# Configuring models
+models:
+  customer_analytics_dbt:
+    # Staging models - views for initial data preparation
+    staging:
+      +materialized: view
+    
+    # Intermediate models - ephemeral for performance
+    intermediate:
+      +materialized: ephemeral
+    
+    # Marts models - tables for final analytics
+    marts:
+      +materialized: table
+      +unique_key: customer_id
+
+# Configure variables for different environments
+vars:
+  # Default project and dataset
+  source_project: "your-project"
+  source_dataset: "dataset"
+  target_dataset: "analytics"

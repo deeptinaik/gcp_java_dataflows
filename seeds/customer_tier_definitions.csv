@@ -1,0 +1,4 @@
+tier,min_spent,max_spent,benefits
+Standard,0,5000,"Basic support and regular promotions"
+Preferred,5001,10000,"Priority support and exclusive offers"
+VIP,10001,999999999,"Dedicated account manager and premium benefits"
