@@ -1,0 +1,79 @@
+version: 2
+
+models:
+  - name: int_purchase_events_enriched
+    description: Purchase events with customer tier assignment and time windows
+    columns:
+      - name: customer_id
+        description: Customer identifier
+        tests:
+          - not_null
+      - name: amount
+        description: Purchase amount
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: customer_tier
+        description: Customer tier based on purchase amount (GOLD/SILVER/BRONZE)
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['GOLD', 'SILVER', 'BRONZE']
+      - name: window_start
+        description: Time window start for aggregation
+        tests:
+          - not_null
+
+  - name: int_transactions_enriched
+    description: Transactions with fraud detection and customer profile enrichment
+    columns:
+      - name: transaction_id
+        description: Unique transaction identifier
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: Customer identifier
+        tests:
+          - not_null
+      - name: fraud_status
+        description: Fraud detection result (SUSPICIOUS/NORMAL)
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['SUSPICIOUS', 'NORMAL']
+      - name: customer_avg_amount
+        description: Customer's historical average transaction amount
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+
+  - name: int_sales_enriched
+    description: Sales data with product enrichment and categorization
+    columns:
+      - name: sale_id
+        description: Unique sale identifier
+        tests:
+          - not_null
+          - unique
+      - name: product_id
+        description: Product identifier
+        tests:
+          - not_null
+      - name: store_id
+        description: Store identifier
+        tests:
+          - not_null
+      - name: sale_category
+        description: Sale value category (HIGH_VALUE/MEDIUM_VALUE/LOW_VALUE)
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['HIGH_VALUE', 'MEDIUM_VALUE', 'LOW_VALUE']
+      - name: unit_price
+        description: Price per unit
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0

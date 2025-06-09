@@ -1,0 +1,129 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: Raw data ingested from various sources (PubSub, files, etc.)
+    database: "{{ var('staging_database') }}"
+    schema: "{{ var('staging_schema') }}"
+    
+    tables:
+      - name: purchase_events
+        description: Raw purchase events from PubSub equivalent
+        columns:
+          - name: customer_id
+            description: Unique customer identifier
+            tests:
+              - not_null
+          - name: amount
+            description: Purchase amount
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 0
+          - name: status
+            description: Purchase status (SUCCESS/FAILED)
+            tests:
+              - not_null
+              - accepted_values:
+                  values: ['SUCCESS', 'FAILED']
+          - name: event_timestamp
+            description: Timestamp when event occurred
+            tests:
+              - not_null
+          - name: _loaded_at
+            description: When the record was loaded into Snowflake
+          - name: _source_file
+            description: Source file or topic name
+      
+      - name: transactions
+        description: Raw transaction data from PubSub equivalent  
+        columns:
+          - name: transaction_id
+            description: Unique transaction identifier
+            tests:
+              - not_null
+              - unique
+          - name: customer_id
+            description: Customer who made the transaction
+            tests:
+              - not_null
+          - name: amount
+            description: Transaction amount
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 0
+          - name: transaction_timestamp
+            description: When transaction occurred
+            tests:
+              - not_null
+          - name: location
+            description: Transaction location
+          - name: _loaded_at
+            description: When the record was loaded into Snowflake
+          - name: _source_file
+            description: Source file or topic name
+      
+      - name: customer_profiles
+        description: Customer profile lookup data
+        columns:
+          - name: customer_id
+            description: Unique customer identifier
+            tests:
+              - not_null
+              - unique
+          - name: avg_amount
+            description: Customer's average transaction amount
+            tests:
+              - dbt_utils.accepted_range:
+                  min_value: 0
+          - name: total_transactions
+            description: Total number of customer transactions
+            tests:
+              - dbt_utils.accepted_range:
+                  min_value: 0
+          - name: account_created_date
+            description: When customer account was created
+          - name: risk_score
+            description: Customer risk score
+          - name: customer_tier
+            description: Customer tier (GOLD/SILVER/BRONZE)
+          - name: _loaded_at
+            description: When the record was loaded into Snowflake
+      
+      - name: sales_data
+        description: Retail sales data from file ingestion
+        columns:
+          - name: sale_id
+            description: Unique sale identifier
+            tests:
+              - not_null
+              - unique
+          - name: product_id
+            description: Product identifier
+            tests:
+              - not_null
+          - name: store_id
+            description: Store identifier
+            tests:
+              - not_null
+          - name: quantity
+            description: Quantity sold
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 1
+          - name: total_amount
+            description: Total sale amount
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 0
+          - name: sale_timestamp
+            description: When sale occurred
+            tests:
+              - not_null
+          - name: _loaded_at
+            description: When the record was loaded into Snowflake
+          - name: _source_file
+            description: Source file name
