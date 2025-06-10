@@ -1,0 +1,12 @@
+{
+ "configtoken":{
+ "la_trans_ft": {"workerMachineType": "n1-standard-8",
+ "template_name": "la_trans_ft",
+ "template_folder": "trans_ft",
+ "main_class": "com.globalpayments.batch.pipeline.TransFTTransformPipeline",
+ "extra_params": "--workerCacheMb=1000",
+ "class_folder_name": "src/TransFT/LATransPopulation",
+ "build_flag": "1"
+}
+}
+}
