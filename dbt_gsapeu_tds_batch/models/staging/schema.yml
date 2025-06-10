@@ -1,0 +1,93 @@
+version: 2
+
+models:
+  - name: stg_tds_batch
+    description: >
+      Staging model for TDS Batch data representing the trusted layer (first_table).
+      This model applies direct pull transformations from the TDS_BATCH source
+      and generates ETL fields as per the mapping document.
+    
+    columns:
+      - name: etlbatchid
+        description: ETL-generated batch identifier
+        tests:
+          - not_null
+      
+      - name: etl_batch_date
+        description: ETL-generated batch date derived from batch ID
+        tests:
+          - not_null
+      
+      - name: dw_create_datetime
+        description: Data warehouse creation timestamp (direct pull from DW_CREATE_DTM)
+        tests:
+          - not_null
+      
+      - name: batch_nbr
+        description: Batch number identifier from TDS_BATCH.BATCH_NBR
+        tests:
+          - not_null
+          - unique
+      
+      - name: device_nbr
+        description: Device number from TDS_BATCH.DEVICE_NBR
+      
+      - name: status
+        description: Batch status from TDS_BATCH.STATUS
+      
+      - name: date_closed
+        description: Date when batch was closed from TDS_BATCH.DATE_CLOSED
+      
+      - name: ext_batch_nbr
+        description: External batch number from TDS_BATCH.EXT_BATCH_NBR
+      
+      - name: capture_method
+        description: Capture method indicator from TDS_BATCH.CAPTURE_METHOD
+      
+      - name: total_amount
+        description: Total batch amount from TDS_BATCH.TOTAL_AMOUNT
+      
+      - name: total_count
+        description: Total transaction count from TDS_BATCH.TOTAL_COUNT
+      
+      - name: open_amount
+        description: Open amount from TDS_BATCH.OPEN_AMOUNT
+      
+      - name: eft_bal_ind
+        description: EFT balance indicator from TDS_BATCH.EFT_BAL_IND
+      
+      - name: userid
+        description: User ID from TDS_BATCH.USERID
+      
+      - name: cust_nbr
+        description: Customer number from TDS_BATCH.CUST_NBR
+        tests:
+          - not_null
+      
+      - name: cutoff_time
+        description: Cutoff time from TDS_BATCH.CUTOFF_TIME
+      
+      - name: eod_flag
+        description: End of day flag from TDS_BATCH.EOD_FLAG
+      
+      - name: settle_id_matrix
+        description: Settlement ID matrix from TDS_BATCH.SETTLE_ID_MATRIX
+      
+      - name: card_type_matrix
+        description: Card type matrix from TDS_BATCH.CARD_TYPE_MATRIX
+      
+      - name: orig_batch_nbr
+        description: Original batch number from TDS_BATCH.ORIG_BATCH_NBR
+      
+      - name: purchase_count
+        description: Purchase count from TDS_BATCH.PURCHASE_COUNT
+      
+      - name: dbt_load_timestamp
+        description: DBT load timestamp for audit purposes
+        tests:
+          - not_null
+      
+      - name: dbt_update_timestamp
+        description: DBT update timestamp for audit purposes
+        tests:
+          - not_null

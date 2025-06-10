@@ -1,0 +1,104 @@
+version: 2
+
+models:
+  - name: tds_batch_transformed
+    description: >
+      Main transformation model for TDS Batch data representing the transformed layer (second_table).
+      This model applies data type conversions, enhanced transformations, and business logic
+      as per the mapping document specifications.
+    
+    columns:
+      - name: etlbatchid
+        description: ETL-generated batch identifier (converted to INTEGER)
+        tests:
+          - not_null
+          - unique
+      
+      - name: etl_batch_date
+        description: ETL-generated batch date derived from batch ID
+        tests:
+          - not_null
+      
+      - name: dw_create_datetime
+        description: Data warehouse creation timestamp (converted to TIMESTAMP)
+        tests:
+          - not_null
+      
+      - name: dw_update_datetime
+        description: >
+          Data warehouse update timestamp (ETL generated for transformed layer).
+          Initially same as create datetime until gets updated.
+        tests:
+          - not_null
+      
+      - name: batch_nbr
+        description: Batch number identifier (converted to INTEGER)
+        tests:
+          - not_null
+          - unique
+      
+      - name: device_nbr
+        description: Device number (converted to NUMERIC)
+      
+      - name: status
+        description: Batch status (remains STRING)
+        tests:
+          - accepted_values:
+              values: ['OPEN', 'CLOSED', 'PENDING', 'CANCELLED']
+      
+      - name: date_closed
+        description: Date when batch was closed (converted to DATE)
+      
+      - name: ext_batch_nbr
+        description: External batch number (converted to NUMERIC)
+      
+      - name: capture_method
+        description: Capture method indicator (remains STRING)
+      
+      - name: total_amount
+        description: Total batch amount (converted to NUMERIC)
+      
+      - name: total_count
+        description: Total transaction count (converted to NUMERIC)
+      
+      - name: open_amount
+        description: Open amount (converted to NUMERIC)
+      
+      - name: eft_bal_ind
+        description: EFT balance indicator (converted to NUMERIC)
+      
+      - name: userid
+        description: User ID (remains STRING)
+      
+      - name: cust_nbr
+        description: Customer number (converted to NUMERIC)
+        tests:
+          - not_null
+      
+      - name: cutoff_time
+        description: Cutoff time (converted to DATE)
+      
+      - name: eod_flag
+        description: End of day flag (converted to NUMERIC)
+      
+      - name: settle_id_matrix
+        description: Settlement ID matrix (remains STRING)
+      
+      - name: card_type_matrix
+        description: Card type matrix (remains STRING)
+      
+      - name: orig_batch_nbr
+        description: Original batch number (converted to NUMERIC)
+      
+      - name: purchase_count
+        description: Purchase count (converted to NUMERIC)
+      
+      - name: dbt_load_timestamp
+        description: DBT load timestamp for audit purposes
+        tests:
+          - not_null
+      
+      - name: dbt_update_timestamp
+        description: DBT update timestamp for audit purposes
+        tests:
+          - not_null

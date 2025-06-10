@@ -1,0 +1,76 @@
+version: 2
+
+seeds:
+  - name: sample_tds_batch_data
+    description: >
+      Sample test data for TDS Batch table.
+      This seed contains representative data matching the structure and data types
+      of the GSAPEU.TDS_BATCH source table for testing and development purposes.
+    
+    columns:
+      - name: batch_nbr
+        description: Sample batch number identifiers
+        tests:
+          - not_null
+          - unique
+      
+      - name: device_nbr
+        description: Sample device numbers
+      
+      - name: status
+        description: Sample batch statuses
+        tests:
+          - accepted_values:
+              values: ['OPEN', 'CLOSED', 'PENDING', 'CANCELLED']
+      
+      - name: date_closed
+        description: Sample batch closure dates
+      
+      - name: ext_batch_nbr
+        description: Sample external batch numbers
+      
+      - name: capture_method
+        description: Sample capture method indicators
+      
+      - name: dw_create_dtm
+        description: Sample data warehouse creation timestamps
+        tests:
+          - not_null
+      
+      - name: total_amount
+        description: Sample total batch amounts
+      
+      - name: total_count
+        description: Sample total transaction counts
+      
+      - name: open_amount
+        description: Sample open amounts
+      
+      - name: eft_bal_ind
+        description: Sample EFT balance indicators
+      
+      - name: userid
+        description: Sample user IDs
+      
+      - name: cust_nbr
+        description: Sample customer numbers
+        tests:
+          - not_null
+      
+      - name: cutoff_time
+        description: Sample cutoff times
+      
+      - name: eod_flag
+        description: Sample end of day flags
+      
+      - name: settle_id_matrix
+        description: Sample settlement ID matrices
+      
+      - name: card_type_matrix
+        description: Sample card type matrices
+      
+      - name: orig_batch_nbr
+        description: Sample original batch numbers
+      
+      - name: purchase_count
+        description: Sample purchase counts
