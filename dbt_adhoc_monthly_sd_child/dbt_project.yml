@@ -37,11 +37,15 @@ models:
 
 # Global variables that can be referenced in models
 vars:
-  # Default values for common fields
-  current_timestamp_format: 'yyyy-MM-dd HH:mm:ss'
-  date_format: 'yyyy-MM-dd'
-  current_ind_active: '1'
-  current_ind_inactive: '0'
+  # Default values for common fields (from LiteralConstant.java)
+  current_timestamp_format: 'yyyy-MM-dd HH:mm:ss'  # YYYY_MM_DD_HH_MM_SS
+  date_format: 'yyyy-MM-dd'                         # YYYY_MM_DD  
+  current_ind_active: '1'                           # CURRENT_IND active state
+  current_ind_inactive: '0'                         # CURRENT_IND inactive state
+  
+  # Source table configuration (replaces AirflowOptions.getChildTableDescription())
+  # In production, this can be passed as: --vars '{"child_table_name": "project.dataset.actual_table"}'
+  child_table_name: 'raw_data.child_table'
 
 # Test configurations
 tests:

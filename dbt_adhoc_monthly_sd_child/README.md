@@ -131,14 +131,17 @@ The DBT model replicates the exact logic from `FullRefresh.java`:
 # Install dependencies
 dbt deps
 
-# Load seed data
+# Load seed data (for development and testing)
 dbt seed
 
 # Run staging models
 dbt run --models staging
 
-# Run mart models
+# Run mart models (with default seed data)
 dbt run --models marts
+
+# Run with production table (replaces AirflowOptions.getChildTableDescription())
+dbt run --models marts --vars '{"child_table_name": "your_project.your_dataset.your_child_table"}'
 
 # Run all tests
 dbt test
@@ -147,6 +150,22 @@ dbt test
 dbt docs generate
 dbt docs serve
 ```
+
+### Airflow Integration
+The original Dataflow pipeline received the child table location via `AirflowOptions.getChildTableDescription()`. In the DBT conversion:
+
+1. **Development**: Uses seed data via `ref('sample_child_table_data')`
+2. **Production**: Use the `child_table_name` variable to specify the actual table:
+   ```bash
+   dbt run --vars '{"child_table_name": "project.dataset.actual_child_table"}'
+   ```
+3. **Airflow DAG**: Pass the variable through DBT operator:
+   ```python
+   dbt_run = DbtRunOperator(
+       task_id='run_soft_delete',
+       vars={'child_table_name': '{{ dag_run.conf.get("child_table") }}'}
+   )
+   ```
 
 ### Environment Variables
 ```bash
