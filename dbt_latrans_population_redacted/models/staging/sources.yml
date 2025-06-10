@@ -1,0 +1,140 @@
+version: 2
+
+sources:
+  - name: trusted_layer
+    description: "Trusted layer tables containing source data for LA Transaction processing"
+    tables:
+      - name: la_trans_ft
+        description: "LA Transaction FT source table from trusted layer"
+        columns:
+          - name: etlbatchid
+            description: "ETL batch identifier"
+          - name: merchant_number
+            description: "Merchant number"
+          - name: corp
+            description: "Corporate code"
+          - name: region
+            description: "Region code"
+          - name: principal
+            description: "Principal code"
+          - name: associate
+            description: "Associate code"
+          - name: chain
+            description: "Chain code"
+          - name: transaction_date
+            description: "Transaction date"
+          - name: transaction_time
+            description: "Transaction time"
+          - name: transaction_id
+            description: "Transaction ID"
+          - name: transaction_amount_new
+            description: "Transaction amount (raw)"
+          - name: settled_amount
+            description: "Settled amount (raw)"
+          - name: authorization_amount
+            description: "Authorization amount"
+          - name: supplemental_authorization_amount
+            description: "Supplemental authorization amount"
+          - name: currency_code
+            description: "Transaction currency code"
+          - name: settle_currency_code
+            description: "Settlement currency code"
+
+  - name: transformed_layer
+    description: "Transformed layer tables containing dimension and reference data"
+    tables:
+      - name: dim_merchant_info
+        description: "Merchant information dimension table"
+        columns:
+          - name: merchant_number
+            description: "Merchant number"
+          - name: hierarchy
+            description: "Merchant hierarchy"
+          - name: corporate
+            description: "Corporate code"
+          - name: region
+            description: "Region code"
+          - name: merchant_information_sk
+            description: "Merchant information surrogate key"
+          - name: current_ind
+            description: "Current indicator"
+            
+      - name: dim_default_curr
+        description: "Default currency dimension table"
+        columns:
+          - name: corporate
+            description: "Corporate code"
+          - name: region
+            description: "Region code"
+          - name: currency_code
+            description: "Default currency code"
+            
+      - name: dim_iso_numeric_curr_code
+        description: "ISO numeric currency code dimension table"
+        columns:
+          - name: currency_code
+            description: "Currency code"
+          - name: iso_numeric_currency_code
+            description: "ISO numeric currency code"
+          - name: iso_numeric_currency_code_sk
+            description: "ISO numeric currency code surrogate key"
+            
+      - name: dim_corporate
+        description: "Corporate dimension table"
+        columns:
+          - name: corporate
+            description: "Corporate code"
+          - name: corporate_sk
+            description: "Corporate surrogate key"
+            
+      - name: dim_region
+        description: "Region dimension table"
+        columns:
+          - name: corporate_sk
+            description: "Corporate surrogate key"
+          - name: region
+            description: "Region code"
+          - name: region_sk
+            description: "Region surrogate key"
+            
+      - name: dim_principal
+        description: "Principal dimension table"
+        columns:
+          - name: corporate_sk
+            description: "Corporate surrogate key"
+          - name: region_sk
+            description: "Region surrogate key"
+          - name: principal
+            description: "Principal code"
+          - name: principal_sk
+            description: "Principal surrogate key"
+            
+      - name: dim_associate
+        description: "Associate dimension table"
+        columns:
+          - name: corporate_sk
+            description: "Corporate surrogate key"
+          - name: region_sk
+            description: "Region surrogate key"
+          - name: principal_sk
+            description: "Principal surrogate key"
+          - name: associate
+            description: "Associate code"
+          - name: associate_sk
+            description: "Associate surrogate key"
+            
+      - name: dim_chain
+        description: "Chain dimension table"
+        columns:
+          - name: corporate_sk
+            description: "Corporate surrogate key"
+          - name: region_sk
+            description: "Region surrogate key"
+          - name: principal_sk
+            description: "Principal surrogate key"
+          - name: associate_sk
+            description: "Associate surrogate key"
+          - name: chain
+            description: "Chain code"
+          - name: chain_sk
+            description: "Chain surrogate key"
