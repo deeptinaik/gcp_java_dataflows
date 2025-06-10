@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: stg_lotr_uid_key_ukrg
+    description: "Staging model for LOTR UID Key UKRG with deduplication logic"
+    columns:
+      - name: trans_sk
+        description: "Transaction surrogate key"
+        tests:
+          - not_null
+      - name: vpaynet_installment_fee_detail_sk_vp
+        description: "VPayNet installment fee detail surrogate key from VP"
+      - name: etlbatchid
+        description: "ETL batch identifier"
+        tests:
+          - not_null
+      - name: rn
+        description: "Row number for deduplication"
+        
+  - name: stg_ukrg_trans_fact
+    description: "Staging model for UKRG transaction fact with date filtering"
+    columns:
+      - name: uk_trans_ft_sk
+        description: "UK transaction fact surrogate key"
+        tests:
+          - not_null
+      - name: etlbatchid
+        description: "ETL batch identifier"
+        tests:
+          - not_null
+      - name: rn
+        description: "Row number for deduplication"
+        
+  - name: stg_vpaynet_installment_fee_detail_daily_uk
+    description: "Staging model for VPayNet installment fee detail daily UK"
+    columns:
+      - name: vpaynet_installment_fee_detail_sk
+        description: "VPayNet installment fee detail surrogate key"
+        tests:
+          - not_null
+          - unique

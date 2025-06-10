@@ -1,0 +1,25 @@
+# DBT artifacts
+target/
+dbt_packages/
+logs/
+
+# OS
+.DS_Store
+.vscode/
+*.tmp
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+.env
+
+# Snowflake credentials
+.env.local
+.env.production
+profiles.yml.local
