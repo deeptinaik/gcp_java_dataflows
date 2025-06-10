@@ -1,0 +1,6 @@
+# DBT and Snowflake dependencies
+dbt-snowflake==1.7.0
+dbt-core==1.7.0
+
+# Additional DBT packages for testing and utilities
+# These should also be added to packages.yml for dbt deps command

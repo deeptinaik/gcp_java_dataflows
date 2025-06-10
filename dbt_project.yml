@@ -1,0 +1,54 @@
+name: 'gcp_dataflow_dbt'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'gcp_dataflow_dbt'
+
+# These configurations specify where dbt should look for different types of files.
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  gcp_dataflow_dbt:
+    # Config indicated by + and applies to all files under models/staging/
+    staging:
+      +materialized: view
+      +docs:
+        node_color: "lightblue"
+    
+    # Config indicated by + and applies to all files under models/intermediate/  
+    intermediate:
+      +materialized: table
+      +docs:
+        node_color: "orange"
+    
+    # Config indicated by + and applies to all files under models/marts/
+    marts:
+      +materialized: table
+      +docs:
+        node_color: "green"
+
+# Snowflake-specific configurations
+vars:
+  # Database and schema configurations
+  staging_database: 'RAW_DATA'
+  staging_schema: 'staging'
+  warehouse_database: 'ANALYTICS'
+  warehouse_schema: 'marts'
+  
+  # Data retention and processing settings
+  fraud_threshold_multiplier: 3
+  customer_tier_gold_threshold: 500
+  customer_tier_silver_threshold: 100
+  window_minutes: 1
+  deduplication_hours: 10

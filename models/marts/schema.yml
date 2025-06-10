@@ -1,0 +1,99 @@
+version: 2
+
+models:
+  - name: mart_sales_by_tier
+    description: Sales aggregated by customer tier per time window - final analytical output
+    columns:
+      - name: customer_tier
+        description: Customer tier (GOLD/SILVER/BRONZE)
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['GOLD', 'SILVER', 'BRONZE']
+      - name: window_start
+        description: Time window start
+        tests:
+          - not_null
+      - name: window_end
+        description: Time window end
+        tests:
+          - not_null
+      - name: total_sales
+        description: Total sales amount for the tier and window
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: transaction_count
+        description: Number of transactions in the window
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+
+  - name: mart_suspicious_transactions
+    description: Transactions flagged as suspicious by fraud detection
+    columns:
+      - name: transaction_id
+        description: Unique transaction identifier
+        tests:
+          - not_null
+          - unique
+      - name: fraud_status
+        description: Should always be SUSPICIOUS for this table
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['SUSPICIOUS']
+      - name: amount_vs_avg_ratio
+        description: Ratio of transaction amount to customer average
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: blacklisted_location
+        description: Whether transaction occurred in blacklisted location
+        tests:
+          - not_null
+
+  - name: mart_normal_transactions
+    description: Transactions classified as normal
+    columns:
+      - name: transaction_id
+        description: Unique transaction identifier
+        tests:
+          - not_null
+          - unique
+      - name: fraud_status
+        description: Should always be NORMAL for this table
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['NORMAL']
+      - name: transaction_pattern
+        description: Transaction pattern classification
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['ELEVATED', 'ABOVE_AVERAGE', 'NORMAL']
+
+  - name: mart_retail_sales
+    description: Comprehensive retail sales analysis with store and product metrics
+    columns:
+      - name: sale_id
+        description: Unique sale identifier
+        tests:
+          - not_null
+          - unique
+      - name: sale_category
+        description: Sale value category
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['HIGH_VALUE', 'MEDIUM_VALUE', 'LOW_VALUE']
+      - name: store_sale_rank
+        description: Ranking of sale within store by amount
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
