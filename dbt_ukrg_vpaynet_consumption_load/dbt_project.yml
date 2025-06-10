@@ -1,0 +1,57 @@
+name: 'ukrg_vpaynet_consumption_load'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'ukrg_vpaynet_consumption_load'
+
+# These configurations specify where dbt should look for different types of files.
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+# Configuring models
+models:
+  ukrg_vpaynet_consumption_load:
+    # Configuration for all models in this project
+    +materialized: table
+    
+    staging:
+      # Configuration for staging models - represents source data abstraction
+      +materialized: view
+      +schema: staging_layer
+    
+    marts:
+      # Configuration for mart models - represents final output
+      +materialized: incremental
+      +schema: consumption_layer
+      +unique_key: 'transaction_detail_sk'
+      +merge_update_columns: ['vp_vpaynet_installment_fee_detail_sk', 'vp_vpaynet_installment_ind', 'vp_arn', 'vp_merchant_number', 'vp_vpaynet_installment_plan_id', 'vp_installment_plan_name', 'vp_installment_transaction_status', 'vp_plan_frequency', 'vp_number_of_installments', 'vp_plan_promotion_code', 'vp_plan_acceptance_created_date_time', 'vp_transaction_amount', 'vp_transaction_currency_code', 'vp_clearing_amount', 'vp_clearing_currency_code', 'vp_clearing_date_time', 'vp_cancelled_amount', 'vp_cancelled_currency_code', 'vp_derived_flag', 'vp_cancelled_date_time', 'vp_installment_funding_fee_amount', 'vp_installment_funding_fee_currency_code', 'vp_installments_service_fee_eligibility_amount', 'vp_installments_service_fee_eligibility_currency_code', 'vp_funding_type', 'vp_etlbatchid']
+
+# Global variables that can be referenced in models
+vars:
+  # Default values for common fields
+  current_timestamp_format: 'yyyy-MM-dd HH:mm:ss'
+  date_format: 'yyyy-MM-dd'
+  etl_batch_id: "{{ run_started_at.strftime('%Y%m%d%H%M%S') }}"
+  
+  # Configuration specific to vpaynet consumption processing
+  date_lookback_days: 7
+  default_sk_value: '-1'
+  
+  # Schema mappings for Snowflake
+  consumption_schema: 'consumption_layer'
+  transformed_schema: 'transformed_layer'
+
+# Test configurations
+tests:
+  +store_failures: true
+  +schema_tests: true

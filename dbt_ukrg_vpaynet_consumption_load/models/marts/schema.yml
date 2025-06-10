@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: wwmaster_transaction_detail_vpaynet_update
+    description: "Master transaction detail table with VPayNet consumption data updates"
+    columns:
+      - name: transaction_detail_sk
+        description: "Transaction detail surrogate key (primary key)"
+        tests:
+          - not_null
+          - unique
+      - name: vp_vpaynet_installment_fee_detail_sk
+        description: "VPayNet installment fee detail surrogate key"
+      - name: vp_vpaynet_installment_ind
+        description: "VPayNet installment indicator (Y/N)"
+        tests:
+          - accepted_values:
+              values: ['Y', 'N']
+      - name: vp_arn
+        description: "VPayNet Acquirer Reference Number"
+      - name: vp_merchant_number
+        description: "VPayNet merchant identification number"
+      - name: vp_vpaynet_installment_plan_id
+        description: "VPayNet installment plan identifier"
+      - name: vp_installment_plan_name
+        description: "VPayNet installment plan name"
+      - name: vp_installment_transaction_status
+        description: "VPayNet installment transaction status"
+      - name: vp_plan_frequency
+        description: "VPayNet plan frequency"
+      - name: vp_number_of_installments
+        description: "VPayNet number of installments"
+      - name: vp_plan_promotion_code
+        description: "VPayNet plan promotion code"
+      - name: vp_plan_acceptance_created_date_time
+        description: "VPayNet plan acceptance creation timestamp"
+      - name: vp_transaction_amount
+        description: "VPayNet transaction amount"
+      - name: vp_transaction_currency_code
+        description: "VPayNet transaction currency code"
+      - name: vp_clearing_amount
+        description: "VPayNet clearing amount"
+      - name: vp_clearing_currency_code
+        description: "VPayNet clearing currency code"
+      - name: vp_clearing_date_time
+        description: "VPayNet clearing timestamp"
+      - name: vp_cancelled_amount
+        description: "VPayNet cancelled amount"
+      - name: vp_cancelled_currency_code
+        description: "VPayNet cancelled currency code"
+      - name: vp_derived_flag
+        description: "VPayNet derived flag"
+      - name: vp_cancelled_date_time
+        description: "VPayNet cancellation timestamp"
+      - name: vp_installment_funding_fee_amount
+        description: "VPayNet installment funding fee amount"
+      - name: vp_installment_funding_fee_currency_code
+        description: "VPayNet installment funding fee currency code"
+      - name: vp_installments_service_fee_eligibility_amount
+        description: "VPayNet installments service fee eligibility amount"
+      - name: vp_installments_service_fee_eligibility_currency_code
+        description: "VPayNet installments service fee eligibility currency code"
+      - name: vp_funding_type
+        description: "VPayNet funding type"
+      - name: vp_etlbatchid
+        description: "VPayNet ETL batch identifier"

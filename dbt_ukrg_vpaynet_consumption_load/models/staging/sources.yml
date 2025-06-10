@@ -1,0 +1,100 @@
+version: 2
+
+sources:
+  - name: transformed_layer
+    description: "Transformed layer containing processed data from various sources"
+    schema: transformed_layer
+    tables:
+      - name: lotr_uid_key_ukrg
+        description: "UKRG transaction key mapping table with vpaynet installment details"
+        columns:
+          - name: trans_sk
+            description: "Transaction surrogate key"
+            tests:
+              - not_null
+          - name: vpaynet_installment_fee_detail_sk_vp
+            description: "VPayNet installment fee detail surrogate key"
+          - name: etlbatchid
+            description: "ETL batch identifier"
+            
+      - name: vw_ukrg_trans_fact
+        description: "UKRG transaction fact view"
+        columns:
+          - name: uk_trans_ft_sk
+            description: "UK transaction fact surrogate key"
+            tests:
+              - not_null
+          - name: etlbatchid
+            description: "ETL batch identifier"
+            tests:
+              - not_null
+              
+      - name: vpaynet_installment_fee_detail_daily_uk
+        description: "Daily VPayNet installment fee details for UK"
+        columns:
+          - name: vpaynet_installment_fee_detail_sk
+            description: "VPayNet installment fee detail surrogate key"
+            tests:
+              - not_null
+              - unique
+          - name: arn
+            description: "Acquirer Reference Number"
+          - name: merchant_number
+            description: "Merchant identification number"
+          - name: vpaynet_installment_plan_id
+            description: "VPayNet installment plan identifier"
+          - name: installment_plan_name
+            description: "Name of the installment plan"
+          - name: installment_transaction_status
+            description: "Status of the installment transaction"
+          - name: plan_frequency
+            description: "Frequency of the installment plan"
+          - name: number_of_installments
+            description: "Total number of installments"
+          - name: plan_promotion_code
+            description: "Promotion code for the plan"
+          - name: plan_acceptance_created_date_time
+            description: "Timestamp when plan acceptance was created"
+          - name: transaction_amount
+            description: "Transaction amount"
+          - name: transaction_currency_code
+            description: "Currency code for transaction amount"
+          - name: clearing_amount
+            description: "Clearing amount"
+          - name: clearing_currency_code
+            description: "Currency code for clearing amount"
+          - name: clearing_date_time
+            description: "Timestamp when clearing occurred"
+          - name: cancelled_amount
+            description: "Cancelled amount"
+          - name: cancelled_currency_code
+            description: "Currency code for cancelled amount"
+          - name: derived_flag
+            description: "Flag indicating if data is derived"
+          - name: cancelled_date_time
+            description: "Timestamp when cancellation occurred"
+          - name: installment_funding_fee_amount
+            description: "Installment funding fee amount"
+          - name: installment_funding_fee_currency_code
+            description: "Currency code for funding fee"
+          - name: installments_service_fee_eligibility_amount
+            description: "Service fee eligibility amount"
+          - name: installments_service_fee_eligibility_currency_code
+            description: "Currency code for service fee eligibility"
+          - name: funding_type
+            description: "Type of funding"
+          - name: etlbatchid
+            description: "ETL batch identifier"
+
+  - name: consumption_layer
+    description: "Consumption layer containing business-ready data"
+    schema: consumption_layer
+    tables:
+      - name: wwmaster_transaction_detail
+        description: "Master transaction detail table in consumption layer"
+        columns:
+          - name: transaction_detail_sk
+            description: "Transaction detail surrogate key"
+            tests:
+              - not_null
+              - unique
