@@ -1,0 +1,15 @@
+version: 2
+
+seeds:
+  - name: sample_temp_data_source
+    description: "Sample data for testing UK GNP LCOT crossborder processing"
+    config:
+      column_types:
+        trans_sk_guid: varchar
+        merchant_number_diff: varchar
+        alpha_currency_code_diff: varchar(3)
+        card_type_diff: varchar(2)
+        charge_type_diff: varchar(10)
+        transaction_amount_diff: decimal(10,2)
+        transaction_id_diff: varchar
+        card_scheme_diff: varchar(2)

@@ -1,0 +1,47 @@
+version: 2
+
+sources:
+  - name: transformed_layer_commplat
+    description: "Source data for UK GNP LCOT crossborder itemized processing"
+    tables:
+      - name: temp_data_source_uk_gnp_sup_tbl_ltr
+        description: "Temporary data source for UK GNP supplemental table data"
+        columns:
+          - name: merchant_number_diff
+            description: "Merchant number difference"
+          - name: alpha_currency_code_diff
+            description: "Alpha currency code difference"
+          - name: card_type_diff
+            description: "Card type difference"
+          - name: charge_type_diff
+            description: "Charge type difference"
+          - name: transaction_amount_diff
+            description: "Transaction amount difference"
+          - name: transaction_id_diff
+            description: "Transaction ID difference"
+          - name: card_scheme_diff
+            description: "Card scheme difference"
+          - name: trans_sk_guid
+            description: "Transaction surrogate key GUID"
+          - name: corp_diff
+            description: "Corporation difference"
+          - name: region_diff
+            description: "Region difference"
+          - name: file_date_diff
+            description: "File date difference"
+
+  - name: transformed_layer
+    description: "Transformed layer dimension tables"
+    tables:
+      - name: dim_xb_rt_mtx_mybank
+        description: "Cross-border rate matrix for MyBank"
+      - name: dim_crd_typ
+        description: "Card type dimension"
+      - name: dim_chrg_typ
+        description: "Charge type dimension"
+      - name: dim_intchg_prgm_cmplnc
+        description: "Interchange program compliance dimension"
+      - name: dim_iso_ctry_cd
+        description: "ISO country code dimension"
+      - name: uk_mmbinsq_assc_parm
+        description: "UK MM BIN SQ association parameters"

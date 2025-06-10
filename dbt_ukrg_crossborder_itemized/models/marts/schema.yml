@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: mybank_itmz_dtl_uk
+    description: "UK GNP LCOT crossborder itemized detail processing - Main mart model"
+    columns:
+      - name: mybank_itemized_detail_sk
+        description: "Primary key - MyBank itemized detail surrogate key"
+        tests:
+          - not_null
+          - unique
+      - name: trans_sk_guid
+        description: "Transaction surrogate key GUID"
+        tests:
+          - not_null
+      - name: type
+        description: "Transaction type"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['FEE']
+      - name: sub_type
+        description: "Transaction sub type"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['TRANSACTION_FEE']
+      - name: fee_type
+        description: "Fee type classification"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['CROSSBORDER_FEE']
+      - name: status
+        description: "Processing status"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['PROCESSED']
+      - name: domestic_international_ind
+        description: "Domestic or international transaction indicator"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['DOMESTIC', 'INTERNATIONAL']
+      - name: payment_method
+        description: "Payment method used"
+        tests:
+          - accepted_values:
+              values: ['mpaynet', 'vpaynet']
+      - name: amount
+        description: "Transaction amount"
+        tests:
+          - not_null
+      - name: expected_settled_amount
+        description: "Expected settlement amount"
+        tests:
+          - not_null
+      - name: alpha_currency_code
+        description: "Currency code"
+        tests:
+          - not_null
+      - name: etlbatchid
+        description: "ETL batch identifier"
+        tests:
+          - not_null

@@ -1,0 +1,4 @@
+trans_sk_guid,merchant_number_diff,alpha_currency_code_diff,card_type_diff,charge_type_diff,transaction_amount_diff,transaction_id_diff,card_scheme_diff
+12345-abcd-6789-efgh,123456789,GBP,VI,18K001,100.50,TXN001,vp
+23456-bcde-7890-fghi,987654321,EUR,MC,18G002,250.75,TXN002,mp
+34567-cdef-8901-ghij,555666777,USD,AX,19A003,500.00,TXN003,vp
