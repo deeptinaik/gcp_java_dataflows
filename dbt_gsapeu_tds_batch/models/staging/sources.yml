@@ -1,0 +1,81 @@
+version: 2
+
+sources:
+  - name: tds_raw
+    description: Raw TDS data sources from GSAPEU platform
+    database: "{{ env_var('SNOWFLAKE_DATABASE') }}"
+    schema: raw_tds
+    
+    tables:
+      - name: tds_batch
+        description: >
+          TDS Batch table containing batch authorization data from GSAPEU TDS platform.
+          This table holds batch-level information for transaction processing.
+        
+        columns:
+          - name: batch_nbr
+            description: Batch number identifier (GSAPEU.TDS_BATCH.BATCH_NBR.NUMBER(12,0))
+            tests:
+              - not_null
+              - unique
+          
+          - name: device_nbr
+            description: Device number (GSAPEU.TDS_BATCH.DEVICE_NBR.NUMBER(10,0))
+          
+          - name: status
+            description: Batch status (GSAPEU.TDS_BATCH.STATUS.VARCHAR2(20 BYTE))
+            tests:
+              - accepted_values:
+                  values: ['OPEN', 'CLOSED', 'PENDING', 'CANCELLED']
+          
+          - name: date_closed
+            description: Date when batch was closed (GSAPEU.TDS_BATCH.DATE_CLOSED.DATE)
+          
+          - name: ext_batch_nbr
+            description: External batch number (GSAPEU.TDS_BATCH.EXT_BATCH_NBR.NUMBER(10,0))
+          
+          - name: capture_method
+            description: Capture method indicator (GSAPEU.TDS_BATCH.CAPTURE_METHOD.VARCHAR2(1 BYTE))
+          
+          - name: dw_create_dtm
+            description: Data warehouse creation timestamp
+            tests:
+              - not_null
+          
+          - name: total_amount
+            description: Total batch amount (GSAPEU.TDS_BATCH.TOTAL_AMOUNT.NUMBER(15,2))
+          
+          - name: total_count
+            description: Total transaction count (GSAPEU.TDS_BATCH.TOTAL_COUNT.NUMBER(10,0))
+          
+          - name: open_amount
+            description: Open amount (GSAPEU.TDS_BATCH.OPEN_AMOUNT.NUMBER(15,2))
+          
+          - name: eft_bal_ind
+            description: EFT balance indicator (GSAPEU.TDS_BATCH.EFT_BAL_IND.NUMBER(5,0))
+          
+          - name: userid
+            description: User ID (GSAPEU.TDS_BATCH.USERID.VARCHAR2(18 BYTE))
+          
+          - name: cust_nbr
+            description: Customer number (GSAPEU.TDS_BATCH.CUST_NBR.NUMBER(15,0))
+            tests:
+              - not_null
+          
+          - name: cutoff_time
+            description: Cutoff time (GSAPEU.TDS_BATCH.CUTOFF_TIME.DATE)
+          
+          - name: eod_flag
+            description: End of day flag (GSAPEU.TDS_BATCH.EOD_FLAG.NUMBER(5,0))
+          
+          - name: settle_id_matrix
+            description: Settlement ID matrix (GSAPEU.TDS_BATCH.SETTLE_ID_MATRIX.VARCHAR2(250 BYTE))
+          
+          - name: card_type_matrix
+            description: Card type matrix (GSAPEU.TDS_BATCH.CARD_TYPE_MATRIX.VARCHAR2(50 BYTE))
+          
+          - name: orig_batch_nbr
+            description: Original batch number (GSAPEU.TDS_BATCH.ORIG_BATCH_NBR.NUMBER(12,0))
+          
+          - name: purchase_count
+            description: Purchase count (GSAPEU.TDS_BATCH.PURCHASE_COUNT.NUMBER(10,0))
