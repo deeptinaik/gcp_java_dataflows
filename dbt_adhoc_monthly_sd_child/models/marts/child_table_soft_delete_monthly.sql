@@ -32,17 +32,19 @@ soft_delete_applied as (
     s.*,
     ct.processing_timestamp,
     
-    -- Apply the soft delete logic from FullRefresh.java transform
+    -- Apply the exact soft delete logic from FullRefresh.java transform
+    -- Java logic: if (recordDate.before(currentTime) && current_ind=="0") -> set current_ind="1" 
+    -- else if (current_ind=="0") -> keep current_ind as "0"
+    -- else -> no change
     case 
       when s.current_ind = '{{ var("current_ind_inactive", "0") }}'
            and try_to_timestamp(s.dw_update_date_time, '{{ var("date_format", "yyyy-MM-dd") }}') < current_timestamp()
       then '{{ var("current_ind_active", "1") }}'
-      when s.current_ind = '{{ var("current_ind_inactive", "0") }}'
-      then s.current_ind
       else s.current_ind
     end as current_ind_final,
     
-    -- Update timestamp when current_ind is 0 (matches FullRefresh logic)
+    -- Update timestamp when current_ind is 0 (matches FullRefresh logic exactly)
+    -- Java logic: both conditions with current_ind="0" update the timestamp
     case 
       when s.current_ind = '{{ var("current_ind_inactive", "0") }}'
       then ct.processing_timestamp
