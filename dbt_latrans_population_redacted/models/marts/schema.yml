@@ -1,0 +1,94 @@
+version: 2
+
+models:
+  - name: mart_latrans_ft
+    description: "Final LA Trans FT mart table with fully processed transaction data"
+    columns:
+      - name: la_trans_ft_uuid
+        description: "Unique identifier for each transaction record"
+        tests:
+          - unique
+          - not_null
+      
+      - name: merchant_number_int
+        description: "Merchant number (integer format)"
+        tests:
+          - not_null
+          - dbt_utils.not_constant
+      
+      - name: transaction_amount
+        description: "Transaction amount"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+      
+      - name: transaction_date
+        description: "Transaction date"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: '1900-01-01'
+              max_value: '2099-12-31'
+      
+      - name: corporate_sk
+        description: "Corporate surrogate key"
+        tests:
+          - not_null
+      
+      - name: merchant_information_sk
+        description: "Merchant information surrogate key"
+        tests:
+          - not_null
+      
+      - name: alpha_currency_code
+        description: "Alpha currency code"
+        tests:
+          - not_null
+          - dbt_utils.not_constant
+      
+      - name: transaction_currency_code_sk
+        description: "Transaction currency code surrogate key"
+        tests:
+          - not_null
+
+  - name: int_latrans_ft_merchant_hierarchy
+    description: "Intermediate model with merchant and hierarchy joins"
+    columns:
+      - name: merchant_information_sk
+        description: "Merchant information surrogate key"
+        tests:
+          - not_null
+      
+      - name: corporate_sk
+        description: "Corporate surrogate key"
+        tests:
+          - not_null
+
+  - name: int_latrans_ft_currency_processing
+    description: "Intermediate model with currency processing"
+    columns:
+      - name: alpha_currency_code
+        description: "Processed alpha currency code"
+        tests:
+          - not_null
+      
+      - name: transaction_currency_code_sk
+        description: "Transaction currency code surrogate key"
+        tests:
+          - not_null
+
+  - name: stg_latrans_ft_source
+    description: "Staging model for source transaction data"
+    columns:
+      - name: la_trans_ft_uuid
+        description: "Unique identifier"
+        tests:
+          - unique
+          - not_null
+      
+      - name: merchant_number_int
+        description: "Merchant number integer"
+        tests:
+          - not_null
