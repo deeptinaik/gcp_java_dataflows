@@ -1,0 +1,84 @@
+version: 2
+
+models:
+  - name: valid_key_table_data_guid_sk_row_num_st1
+    description: "Final mart model containing matched authorization and transaction data with complex business logic for UKRG LCOT UID processing"
+    config:
+      materialized: incremental
+      unique_key: ['north_uk_auth_fin_sk', 'trans_sk']
+      merge_update_columns: ['joinind_auth_dif', 'joininddate_auth_dif', 'global_trid_source_dif', 'global_trid_source_tds', 'global_trid_dif', 'global_trid_tds']
+    columns:
+      - name: north_uk_auth_fin_sk
+        description: "North UK authorization financial surrogate key"
+        tests:
+          - not_null
+          - relationships:
+              to: source('xl_layer', 'vw_north_uk_authorization_fin_ft')
+              field: north_uk_authorization_fin_ft_sk
+      
+      - name: trans_sk
+        description: "Transaction surrogate key"
+        tests:
+          - not_null
+          
+      - name: joinind_auth_dif
+        description: "Join indicator for authorization-difference matching logic (numeric)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]
+              quote: false
+      
+      - name: joininddate_auth_dif
+        description: "Join indicator date for authorization-difference matching"
+        tests:
+          - not_null
+          
+      - name: global_trid_source_dif
+        description: "Global transaction ID source for difference processing"
+        tests:
+          - not_null
+          
+      - name: global_trid_source_tds
+        description: "Global transaction ID source for TDS processing"
+        tests:
+          - not_null
+          
+      - name: global_trid_dif
+        description: "Global transaction ID for difference matching"
+        tests:
+          - not_null
+          
+      - name: global_trid_tds
+        description: "Global transaction ID for TDS processing"
+        tests:
+          - not_null
+          
+      - name: etlbatchid_auth
+        description: "ETL batch ID for authorization processing"
+        tests:
+          - not_null
+          
+      - name: etlbatchid_tran
+        description: "ETL batch ID for transaction processing"
+        tests:
+          - not_null
+          
+      - name: lcot_guid_key_sk
+        description: "LCOT GUID key surrogate key - primary identifier for the record"
+        tests:
+          - not_null
+          - unique
+
+tests:
+  - name: test_auth_dif_matching_logic
+    description: "Validate complex authorization-difference matching business rules"
+    
+  - name: test_joinind_business_rules
+    description: "Validate join indicator values follow business logic patterns"
+    
+  - name: test_incremental_processing
+    description: "Validate incremental processing maintains data integrity"
+    
+  - name: test_global_trid_consistency
+    description: "Validate global transaction ID consistency across source and target fields"

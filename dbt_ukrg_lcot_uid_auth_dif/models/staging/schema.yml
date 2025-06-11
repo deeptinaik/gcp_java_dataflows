@@ -1,0 +1,143 @@
+version: 2
+
+models:
+  - name: stg_uk_auth_dif_filter_dates
+    description: "Staging model for calculating filter dates used in UKRG LCOT UID Auth Dif processing"
+    columns:
+      - name: etlbatchid
+        description: "Current ETL batch identifier"
+        tests:
+          - not_null
+      - name: etlbatchid_date
+        description: "ETL batch date derived from batch ID"
+        tests:
+          - not_null
+      - name: filter_date_etlbatchid_dif
+        description: "Filter date for difference processing (10 days back)"
+        tests:
+          - not_null
+      - name: filter_date_150_days_etlbatchid_auth
+        description: "Filter date for authorization processing (150 days back)"
+        tests:
+          - not_null
+      - name: filter_date_150_etlbatchid_date_auth
+        description: "Filter date for authorization (150 days back) as date"
+        tests:
+          - not_null
+      - name: filter_date_5_days_etlbatchid_date_auth
+        description: "Filter date for authorization processing (5 days back)"
+        tests:
+          - not_null
+      - name: filter_date_5_days_etlbatchid_auth
+        description: "Filter date for authorization (5 days back) as number"
+        tests:
+          - not_null
+      - name: filter_date_180_etlbatchid_date
+        description: "Filter date for 180 days back processing"
+        tests:
+          - not_null
+      - name: etlbatchid_tran_full_join
+        description: "ETL batch ID for transaction full join processing"
+        tests:
+          - not_null
+      - name: filter_date_1_yr_etlbatchid_date_target
+        description: "Filter date for 1 year back processing"
+        tests:
+          - not_null
+      - name: filter_date_20_etlbatchid_date_guid
+        description: "Filter date for GUID processing (20 days back)"
+        tests:
+          - not_null
+      - name: filter_date_150_etlbatchid_date_guid
+        description: "Filter date for GUID processing (150 days back)"
+        tests:
+          - not_null
+
+  - name: stg_uk_mpg_scorp
+    description: "Staging model for UK MPG SCORP corporate configuration data"
+    columns:
+      - name: corporate
+        description: "Corporate identifier for EU MPG S application"
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_temp_uk_auth_table
+    description: "Staging model for UK authorization data with complex filtering and transformation logic"
+    columns:
+      - name: north_uk_auth_fin_sk
+        description: "North UK authorization financial surrogate key"
+        tests:
+          - not_null
+      - name: merchant_number_a
+        description: "Authorization merchant number"
+      - name: amount_a
+        description: "Authorization amount"
+      - name: auth_code_a
+        description: "Authorization code"
+      - name: tran_date_a
+        description: "Authorization transaction date"
+      - name: card_nbr_a
+        description: "Authorization card number"
+      - name: tran_time_a
+        description: "Authorization transaction time"
+      - name: terminal_id_a
+        description: "Authorization terminal ID"
+      - name: resp_code_num_gnap_auth
+        description: "Authorization response code numeric"
+      - name: record_type_gnap_auth
+        description: "Authorization record type"
+      - name: rec_type_gnap_auth
+        description: "Authorization record type classification"
+      - name: excep_reason_code_gnap_auth
+        description: "Authorization exception reason code"
+      - name: global_trid_auth
+        description: "Global transaction ID for authorization"
+        tests:
+          - not_null
+      - name: global_trid_source_auth
+        description: "Source of global transaction ID for authorization"
+        tests:
+          - not_null
+
+  - name: stg_temp_uk_dif_table
+    description: "Staging model for UK difference/transaction data with filtering logic"
+    columns:
+      - name: card_scheme_diff
+        description: "Card scheme for difference processing"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['MC', 'VS', 'AX', 'DI', 'OB']
+              quote: false
+      - name: global_trid_diff
+        description: "Global transaction ID for difference matching"
+        tests:
+          - not_null
+      - name: global_trid_source_diff
+        description: "Source of global transaction ID for difference"
+        tests:
+          - not_null
+      - name: merchant_number_t
+        description: "Transaction merchant number"
+      - name: amount_t
+        description: "Transaction amount"
+      - name: tran_date_t
+        description: "Transaction date"
+      - name: tran_time_t
+        description: "Transaction time"
+      - name: card_nbr_t
+        description: "Transaction card number"
+      - name: auth_code_t
+        description: "Transaction authorization code"
+      - name: terminal_id_t
+        description: "Transaction terminal ID"
+      - name: tran_id_t
+        description: "Transaction ID"
+
+tests:
+  - name: test_filter_dates_business_logic
+    description: "Validate that filter dates are properly calculated and within expected ranges"
+
+  - name: test_staging_data_integrity
+    description: "Validate data integrity across staging models"

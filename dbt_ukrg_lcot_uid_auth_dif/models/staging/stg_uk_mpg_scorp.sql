@@ -10,7 +10,7 @@
 
 SELECT DISTINCT 
     corporate
-FROM xl_layer.lcot_config_details 
+FROM {{ source('xl_layer', 'lcot_config_details') }} 
 WHERE 
     application_name = 'eu_mpg_s' 
     AND current_ind = 0
