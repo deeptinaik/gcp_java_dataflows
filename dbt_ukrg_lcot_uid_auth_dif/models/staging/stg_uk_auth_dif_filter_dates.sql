@@ -18,7 +18,7 @@ WITH lcot_max_etlbatchids AS (
             {{ parse_date('%Y%m%d', 'SUBSTR(CAST(MAX(etlbatchid_auth) AS STRING), 1, 8)') }}, 
             {{ current_date() }}
         ) AS max_auth_date
-    FROM xl_layer.lcot_uid_key_ukrg
+    FROM {{ source('xl_layer', 'lcot_uid_key_ukrg') }}
 )
 
 SELECT 

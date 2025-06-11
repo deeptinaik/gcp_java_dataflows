@@ -99,7 +99,7 @@ auth_base AS (
                 global_trid AS global_trid_target,
                 {{ generate_global_trid_auth('amount_1x', 'network_reference_number', 'merchant_number', 'tran_date', 'global_trid') }} AS global_trid,
                 COALESCE(global_trid_source, '') AS global_trid_source
-            FROM xl_layer.vw_north_uk_authorization_fin_ft 
+            FROM {{ source('xl_layer', 'vw_north_uk_authorization_fin_ft') }} 
             CROSS JOIN filter_dates
             WHERE etl_batch_date >= filter_dates.filter_date_150_etlbatchid_date_auth
             QUALIFY ROW_NUMBER() OVER(PARTITION BY north_uk_authorization_fin_ft_sk ORDER BY etlbatchid DESC) = 1
@@ -123,7 +123,7 @@ auth_base AS (
                             merchant_number,
                             card_number_sk,
                             MAX(CASE WHEN trans_sk = '-1' THEN lcot_guid_key_sk ELSE NULL END) AS lcot_guid_key_sk
-                        FROM xl_layer.lcot_uid_key_ukrg 
+                        FROM {{ source('xl_layer', 'lcot_uid_key_ukrg') }} 
                         CROSS JOIN filter_dates
                         WHERE 
                             auth_sk <> '-1'
@@ -151,7 +151,7 @@ auth_base AS (
                     SELECT 
                         north_uk_authorization_fin_ft_sk AS auth_sk,
                         NULL AS lcot_guid_key_sk  
-                    FROM xl_layer.vw_north_uk_authorization_fin_ft 
+                    FROM {{ source('xl_layer', 'vw_north_uk_authorization_fin_ft') }} 
                     CROSS JOIN filter_dates
                     WHERE etl_batch_date >= filter_dates.filter_date_5_days_etlbatchid_date_auth
                     QUALIFY ROW_NUMBER() OVER(PARTITION BY north_uk_authorization_fin_ft_sk ORDER BY etlbatchid DESC) = 1
@@ -159,7 +159,7 @@ auth_base AS (
                 
                 LEFT JOIN (
                     SELECT auth_sk 
-                    FROM xl_layer.lcot_uid_key_ukrg 
+                    FROM {{ source('xl_layer', 'lcot_uid_key_ukrg') }} 
                     CROSS JOIN filter_dates
                     WHERE 
                         auth_sk <> '-1' 
@@ -182,7 +182,7 @@ auth_base AS (
             chain, 
             dba_name, 
             {{ ltrim_zeros('merchant_number') }} AS merchant_number
-        FROM consumption_layer.dim_merchant_information
+        FROM {{ source('consumption_layer', 'dim_merchant_information') }}
         WHERE current_ind = '0'
     ) H ON AA.merchant_number = H.merchant_number
 ),
