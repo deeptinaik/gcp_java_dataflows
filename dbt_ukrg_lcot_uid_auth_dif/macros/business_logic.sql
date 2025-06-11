@@ -13,7 +13,7 @@
 {% macro generate_global_trid_auth(amount, network_ref, merchant_number, tran_date, global_trid) %}
   COALESCE(
     {{ global_trid }},
-    {{ sha512_base64('CONCAT(COALESCE(' ~ amount ~ ', 0), TRIM(SUBSTRING(COALESCE(TRIM(' ~ network_ref ~ '), \'\'), 1, 15)), LTRIM(TRIM(' ~ merchant_number ~ '), \'0\'), ' ~ tran_date ~ ')') }}
+    {{ sha512_base64('CONCAT(COALESCE(CAST(' ~ amount ~ ' AS STRING), \'0\'), TRIM(SUBSTRING(COALESCE(TRIM(' ~ network_ref ~ '), \'\'), 1, 15)), LTRIM(TRIM(' ~ merchant_number ~ '), \'0\'), CAST(' ~ tran_date ~ ' AS STRING))') }}
   )
 {% endmacro %}
 
@@ -60,7 +60,7 @@
     OR
     (
       COALESCE({{ record_type }}, '') = 'mpg_s'
-      AND COALESCE({{ resp_code }}, 0) <> 05
+      AND COALESCE({{ resp_code }}, 0) <> 5
     )
   )
 {% endmacro %}

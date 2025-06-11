@@ -24,22 +24,22 @@ WITH lcot_max_etlbatchids AS (
 SELECT 
     {{ var('etl_batch_id') }} AS etlbatchid,
     
-    CAST({{ parse_date('%Y%m%d', 'SUBSTR(CAST(' ~ var('etl_batch_id') ~ ' AS STRING), 1, 8)') }} AS DATE) AS etlbatchid_date,
+    CAST({{ parse_date('%Y%m%d', 'SUBSTR(CAST(' ~ var('etl_batch_id') | string ~ ' AS STRING), 1, 8)') }} AS DATE) AS etlbatchid_date,
     
     -- Filter dates for dif processing (10 days back)
-    CAST({{ rpad('format_date(\'%Y%m%d\', ' ~ date_sub('max_dif_date', var('filter_date_interval_dif'), 'DAY') ~ ')', '17', '0') }} AS NUMBER) AS filter_date_etlbatchid_dif,
+    CAST({{ rpad(format_date('%Y%m%d', date_sub('max_dif_date', var('filter_date_interval_dif'), 'DAY')), '17', '0') }} AS NUMBER) AS filter_date_etlbatchid_dif,
     
     -- Filter dates for auth processing (150 days back)
-    CAST({{ rpad('format_date(\'%Y%m%d\', ' ~ date_sub('max_auth_date', var('filter_date_interval_auth_150'), 'DAY') ~ ')', '17', '0') }} AS NUMBER) AS filter_date_150_days_etlbatchid_auth,
+    CAST({{ rpad(format_date('%Y%m%d', date_sub('max_auth_date', var('filter_date_interval_auth_150'), 'DAY')), '17', '0') }} AS NUMBER) AS filter_date_150_days_etlbatchid_auth,
     {{ date_sub('max_auth_date', var('filter_date_interval_auth_150'), 'DAY') }} AS filter_date_150_etlbatchid_date_auth,
     
     -- Filter dates for auth processing (5 days back)
     {{ date_sub('max_auth_date', var('filter_date_interval_auth_5'), 'DAY') }} AS filter_date_5_days_etlbatchid_date_auth,
-    CAST({{ rpad('format_date(\'%Y%m%d\', ' ~ date_sub('max_auth_date', var('filter_date_interval_auth_5'), 'DAY') ~ ')', '17', '0') }} AS NUMBER) AS filter_date_5_days_etlbatchid_auth,
+    CAST({{ rpad(format_date('%Y%m%d', date_sub('max_auth_date', var('filter_date_interval_auth_5'), 'DAY')), '17', '0') }} AS NUMBER) AS filter_date_5_days_etlbatchid_auth,
     
     -- Additional filter dates
     {{ date_sub('max_dif_date', var('filter_date_interval_180'), 'DAY') }} AS filter_date_180_etlbatchid_date,
-    CAST({{ rpad('format_date(\'%Y%m%d\', ' ~ date_sub('max_dif_date', var('filter_date_interval_auth_5'), 'DAY') ~ ')', '17', '0') }} AS NUMBER) AS etlbatchid_tran_full_join,
+    CAST({{ rpad(format_date('%Y%m%d', date_sub('max_dif_date', var('filter_date_interval_auth_5'), 'DAY')), '17', '0') }} AS NUMBER) AS etlbatchid_tran_full_join,
     {{ date_sub('max_dif_date', var('filter_date_interval_365'), 'DAY') }} AS filter_date_1_yr_etlbatchid_date_target,
     {{ date_sub(current_date(), var('filter_date_interval_20'), 'DAY') }} AS filter_date_20_etlbatchid_date_guid,
     {{ date_sub(current_date(), var('filter_date_interval_auth_150'), 'DAY') }} AS filter_date_150_etlbatchid_date_guid
