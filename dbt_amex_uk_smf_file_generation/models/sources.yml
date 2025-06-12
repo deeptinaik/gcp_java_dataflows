@@ -1,0 +1,185 @@
+version: 2
+
+sources:
+  - name: trusted_layer
+    description: "Trusted layer containing validated and cleansed Amex UK transaction data"
+    database: AMEX_UK_WAREHOUSE
+    schema: TRUSTED_LAYER
+    
+    tables:
+      - name: amex_uk_transactions
+        description: "Raw Amex UK transaction data from source systems"
+        columns:
+          - name: transaction_id
+            description: "Unique transaction identifier"
+            tests:
+              - not_null
+              - unique
+              
+          - name: merchant_number
+            description: "Merchant identification number"
+            tests:
+              - not_null
+              
+          - name: transaction_date
+            description: "Date when transaction occurred"
+            tests:
+              - not_null
+              
+          - name: transaction_time
+            description: "Time when transaction occurred"
+            
+          - name: transaction_amount
+            description: "Original transaction amount"
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 0
+                  inclusive: false
+              
+          - name: currency_code
+            description: "Original transaction currency"
+            tests:
+              - not_null
+              - accepted_values:
+                  values: ['GBP', 'USD', 'EUR', 'CAD', 'AUD', 'JPY', 'CHF', 'SEK', 'NOK', 'DKK']
+              
+          - name: settlement_amount
+            description: "Settlement amount (may be null if conversion needed)"
+            
+          - name: settlement_currency
+            description: "Settlement currency"
+            
+          - name: card_number
+            description: "Masked card number"
+            tests:
+              - not_null
+              
+          - name: card_type
+            description: "Type of card (should be AMEX for this pipeline)"
+            tests:
+              - not_null
+              - accepted_values:
+                  values: ['AMEX', 'AMERICAN EXPRESS']
+              
+          - name: authorization_code
+            description: "Authorization code from payment processor"
+            
+          - name: batch_number
+            description: "Processing batch number"
+            
+          - name: terminal_id
+            description: "Terminal identification"
+            
+          - name: amex_se_number
+            description: "Amex SE (Servicing Establishment) number"
+            
+          - name: amex_merchant_id
+            description: "Amex-specific merchant identifier"
+            
+          - name: amex_card_member_number
+            description: "Amex card member number"
+            
+          - name: amex_transaction_code
+            description: "Amex transaction type code"
+            
+          - name: amex_reference_number
+            description: "Amex reference number"
+            
+          - name: amex_approval_code
+            description: "Amex approval code"
+            
+          - name: amex_charge_date
+            description: "Date when charge was processed by Amex"
+            
+          - name: amex_submission_date
+            description: "Date when transaction was submitted to Amex"
+            
+          - name: etl_batch_date
+            description: "ETL processing batch date"
+            tests:
+              - not_null
+              
+          - name: create_date_time
+            description: "Record creation timestamp"
+            
+          - name: update_date_time
+            description: "Record last update timestamp"
+
+  - name: transformed_layer
+    description: "Transformed layer containing dimension and lookup tables"
+    database: AMEX_UK_WAREHOUSE
+    schema: TRANSFORMED_LAYER
+    
+    tables:
+      - name: dim_merchant_information
+        description: "Merchant information dimension table"
+        columns:
+          - name: merchant_number
+            description: "Merchant identification number"
+            tests:
+              - not_null
+              - unique
+              
+          - name: merchant_name
+            description: "Merchant business name"
+            
+          - name: merchant_category_code
+            description: "Merchant category code (MCC)"
+            
+          - name: merchant_country_code
+            description: "Merchant country code"
+            
+          - name: merchant_city
+            description: "Merchant city"
+            
+          - name: merchant_state
+            description: "Merchant state/province"
+            
+          - name: merchant_zip_code
+            description: "Merchant postal code"
+            
+          - name: merchant_phone
+            description: "Merchant phone number"
+            
+          - name: merchant_dba_name
+            description: "Merchant DBA (Doing Business As) name"
+            
+          - name: active_flag
+            description: "Flag indicating if merchant is active"
+            tests:
+              - not_null
+              - accepted_values:
+                  values: ['Y', 'N']
+                  
+      - name: dim_currency_rates
+        description: "Currency exchange rates dimension table"
+        columns:
+          - name: from_currency_code
+            description: "Source currency code"
+            tests:
+              - not_null
+              
+          - name: to_currency_code
+            description: "Target currency code"
+            tests:
+              - not_null
+              
+          - name: exchange_rate
+            description: "Exchange rate value"
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 0
+                  inclusive: false
+              
+          - name: effective_date
+            description: "Date when rate becomes effective"
+            tests:
+              - not_null
+              
+          - name: active_flag
+            description: "Flag indicating if rate is active"
+            tests:
+              - accepted_values:
+                  values: ['Y', 'N']
