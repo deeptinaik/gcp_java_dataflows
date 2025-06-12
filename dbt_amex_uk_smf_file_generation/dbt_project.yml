@@ -1,0 +1,111 @@
+name: 'dbt_amex_uk_smf_file_generation'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'amex_uk_smf_file_generation'
+
+# These configurations specify where dbt should look for different types of files.
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+# Configuring models
+models:
+  dbt_amex_uk_smf_file_generation:
+    # Configuration for all models in this project
+    +materialized: table
+    
+    staging:
+      # Configuration for staging models - raw data processing
+      +materialized: view
+      +schema: staging
+    
+    intermediate:
+      # Configuration for intermediate transformation models
+      +materialized: ephemeral
+      +schema: intermediate
+    
+    marts:
+      # Configuration for final mart models - SMF output
+      +materialized: table
+      +unique_key: 'transaction_id'
+      +schema: marts
+      +post-hook: "{{ log('SMF file generation completed for batch: ' ~ var('etl_batch_date'), info=true) }}"
+
+# Source configurations
+sources:
+  dbt_amex_uk_smf_file_generation:
+    +database: 'AMEX_UK_WAREHOUSE'
+    +schema: 'TRUSTED_LAYER'
+
+# Global variables that can be referenced in models
+vars:
+  # Date format constants (from AmexCommonUtil.java)
+  date_format_yyyymmdd: 'YYYYMMDD'
+  date_format_yyyy_mm_dd: 'YYYY-MM-DD'
+  date_format_mmddyy: 'MMDDYY'
+  
+  # Default values (from AmexCommonUtil.java)
+  dmx_lookup_failure: '-2'
+  dmx_lookup_null_blank: '-1'
+  default_value: 'UNKNOWN'
+  active_flag: 'Y'
+  inactive_flag: 'N'
+  success_status: 'SUCCESS'
+  failed_status: 'FAILED'
+  
+  # Currency constants
+  gbp_currency: 'GBP'
+  usd_currency: 'USD'
+  eur_currency: 'EUR'
+  
+  # SMF record types
+  smf_header_record: '01'
+  smf_transaction_record: '02'
+  smf_summary_record: '03'
+  smf_trailer_record: '99'
+  
+  # File processing constants
+  max_records_per_file: 10000
+  file_extension_smf: '.smf'
+  file_prefix_amex_uk: 'AMEX_UK_'
+  
+  # Validation constants
+  min_merchant_number_length: 10
+  max_merchant_number_length: 15
+  transaction_id_length: 20
+  amex_card_number_length: 15
+  
+  # Runtime parameters
+  etl_batch_date: '{{ run_started_at.strftime("%Y-%m-%d") }}'
+
+# Test configurations
+tests:
+  +store_failures: true
+  +schema_tests: true
+  
+# Macro configurations
+macros:
+  dbt_amex_uk_smf_file_generation:
+    +docs:
+      show: true
+
+# Documentation
+docs:
+  +render: true
+
+# Snapshots configuration
+snapshots:
+  dbt_amex_uk_smf_file_generation:
+    +target_schema: 'SNAPSHOTS'
+    +strategy: 'timestamp'
+    +updated_at: 'update_date_time'

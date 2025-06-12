@@ -1,0 +1,86 @@
+version: 2
+
+models:
+  - name: stg_amex_uk_validated_transactions
+    description: "Staging model for validated Amex UK transactions"
+    tests:
+      - dbt_utils.row_count:
+          above: 0
+    columns:
+      - name: transaction_id
+        description: "Unique transaction identifier"
+        tests:
+          - not_null
+          - unique
+      - name: merchant_number
+        description: "Merchant identification number"
+        tests:
+          - not_null
+      - name: transaction_amount
+        description: "Transaction amount"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: false
+
+  - name: stg_amex_uk_filtered_transactions
+    description: "Staging model for Amex-filtered transactions"
+    tests:
+      - dbt_utils.row_count:
+          above: 0
+    columns:
+      - name: card_type
+        description: "Card type (should be AMEX only)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['AMEX', 'AMERICAN EXPRESS']
+      - name: card_number
+        description: "Card number (should start with 3 for Amex)"
+        tests:
+          - not_null
+
+  - name: amex_uk_smf_output
+    description: "Final SMF output for Amex UK transactions"
+    tests:
+      - dbt_utils.row_count:
+          above: 0
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - transaction_id
+            - smf_sequence_number
+    columns:
+      - name: transaction_id
+        description: "Unique transaction identifier"
+        tests:
+          - not_null
+          - unique
+      - name: smf_record_type
+        description: "SMF record type"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['02']  # Transaction record type
+      - name: settlement_amount
+        description: "Settlement amount (formatted)"
+        tests:
+          - not_null
+      - name: currency_code
+        description: "Transaction currency"
+        tests:
+          - not_null
+      - name: settlement_currency
+        description: "Settlement currency"
+        tests:
+          - not_null
+      - name: processing_status
+        description: "Processing status"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['SUCCESS']
+      - name: smf_file_identifier
+        description: "SMF file identifier"
+        tests:
+          - not_null
