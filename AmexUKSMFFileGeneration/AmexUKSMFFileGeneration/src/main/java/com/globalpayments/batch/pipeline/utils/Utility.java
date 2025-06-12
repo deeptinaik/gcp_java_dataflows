@@ -1,0 +1,273 @@
+package com.globalpayments.batch.pipeline.utils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Utility {
+    public static final Logger log = LoggerFactory.getLogger(Utility.class);
+
+    public static List<String> getDTLColumnList() {
+        List<String> list = new ArrayList<>();
+        list.add("key");
+        list.add("dtl_record_type");
+        list.add("merchant_number");
+        list.add("seller_legal_name");
+        list.add("seller_dba_name");
+        list.add("seller_business_registration_number_rfc");
+        list.add("seller_mcc");
+        list.add("seller_street_address_1");
+        list.add("seller_city_name");
+        list.add("seller_region_code_state");
+        list.add("seller_postal_code");
+        list.add("seller_country_code");
+        list.add("seller_business_phone_number");
+        list.add("seller_email_address");
+        list.add("seller_url");
+        list.add("seller_currency_code");
+        list.add("authorized_signer_first_name");
+        list.add("authorized_signer_last_name");
+        list.add("language");
+        list.add("jcb_indicator");
+        list.add("significant_beneficial_owner_1_first_name");
+        list.add("significant_beneficial_owner_1_last_name");
+        list.add("significant_beneficial_owner_1_identification_number_ssn");
+        list.add("significant_beneficial_owner_1_date_of_birth");
+        list.add("significant_beneficial_owner_1_street_address_1");
+        list.add("significant_beneficial_owner_1_city_name");
+        list.add("significant_beneficial_owner_1_region_code_state");
+        list.add("significant_beneficial_owner_1_postal_code");
+        list.add("significant_beneficial_owner_1_country_code");
+        list.add("marketing_indicator");
+        list.add("ownership_type_indicator");
+        list.add("seller_transacting_indicator");
+        list.add("se_detail_status_code");
+        list.add("se_detail_status_change_date");
+        list.add("seller_street_address_2");
+        list.add("seller_street_address_3");
+        list.add("seller_street_address_4");
+        list.add("seller_street_address_5");
+        list.add("authorized_signer_title");
+        list.add("significant_beneficial_owner_1_street_address_2");
+        list.add("significant_beneficial_owner_1_street_address_3");
+        list.add("significant_beneficial_owner_1_street_address_4");
+        list.add("significant_beneficial_owner_1_street_address_5");
+        list.add("filler10");
+        list.add("client_defined");
+        list.add("dtl_record_type_error_flag");
+        list.add("dtl_record_number_error_flag");
+        list.add("dtl_seller_id_error_flag");
+        list.add("seller_legal_name_error_flag");
+        list.add("seller_dba_name_error_flag");
+        list.add("seller_business_registration_number_rfc_error_flag");
+        list.add("seller_mcc_error_flag");
+        list.add("seller_street_address_error_flag");
+        list.add("seller_city_name_error_flag");
+        list.add("seller_state_location_region_code_error_flag");
+        list.add("seller_postal_code_location_postal_code_error_flag");
+        list.add("seller_country_code_error_flag");
+        list.add("seller_business_phone_number_error_flag");
+        list.add("seller_email_address_error_flag");
+        list.add("seller_url_error_flag");
+        list.add("seller_currency_code_error_flag");
+        list.add("authorized_signer_first_name_error_flag");
+        list.add("authorized_signer_last_name_error_flag");
+        list.add("language_error_flag");
+        list.add("jcb_error_flag");
+        list.add("significant_beneficial_owner_1_first_name_error_flag");
+        list.add("significant_beneficial_owner_1_last_name_error_flag");
+        list.add("significant_beneficial_owner_1_identification_number_ssn_error_flag");
+        list.add("significant_beneficial_owner_1_date_of_birth_error_flag");
+        list.add("significant_beneficial_owner_1_street_address_1_error_flag");
+        list.add("significant_beneficial_owner_1_city_name_error_flag");
+        list.add("significant_beneficial_owner_1_region_code_state_error_flag");
+        list.add("significant_beneficial_owner_1_postal_code_error_flag");
+        list.add("significant_beneficial_owner_1_country_code_error_flag");
+        list.add("marketing_indicator_error_flag");
+        list.add("ownership_type_error_flag");
+        list.add("seller_transacting_indicator_error_flag");
+        list.add("se_detail_status_code_error_flag");
+        list.add("se_detail_status_change_date_error_flag");
+        list.add("seller_street_address_2_error_flag");
+        list.add("seller_street_address_3_error_flag");
+        list.add("seller_street_address_4_error_flag");
+        list.add("seller_street_address_5_error_flag");
+        list.add("authorized_signer_title_error_flag");
+        list.add("significant_beneficial_owner_1_street_address_2_error_flag");
+        list.add("significant_beneficial_owner_1_street_address_3_error_flag");
+        list.add("significant_beneficial_owner_1_street_address_4_error_flag");
+        list.add("significant_beneficial_owner_1_street_address_5_error_flag");
+        list.add("client_defined_error_flag");
+        list.add("filler11");
+        list.add("record_reject_identifier");
+        return list;
+    }
+
+    public static List<String> getDT2ColumnList() {
+        List<String> list = new ArrayList<> ();
+        list.add("key");
+        list.add("dt2_record_type");
+        list.add("merchant_number");
+        list.add("authorized_signer_identification_number");
+        list.add("authorized_signer_date_of_birth");
+        list.add("authorized_signer_street_address_1");
+        list.add("authorized_signer_street_address_2");
+        list.add("authorized_signer_street_address_3");
+        list.add("authorized_signer_street_address_4");
+        list.add("authorized_signer_street_address_5");
+        list.add("authorized_signer_city_name");
+        list.add("authorized_signer_region_code");
+        list.add("authorized_signer_postal_code");
+        list.add("authorized_signer_country_code");
+        list.add("significant_beneficial_owner_2_first_name");
+        list.add("significant_beneficial_owner_2_last_name");
+        list.add("significant_beneficial_owner_2_identification_number");
+        list.add("significant_beneficial_owner_2_date_of_birth");
+        list.add("significant_beneficial_owner_2_street_address_1");
+        list.add("significant_beneficial_owner_2_street_address_2");
+        list.add("significant_beneficial_owner_2_street_address_3");
+        list.add("significant_beneficial_owner_2_street_address_4");
+        list.add("significant_beneficial_owner_2_street_address_5");
+        list.add("significant_beneficial_owner_2_city_name");
+        list.add("significant_beneficial_owner_2_region_code_state");
+        list.add("significant_beneficial_owner_2_postal_code");
+        list.add("significant_beneficial_owner_2_country_code");
+        list.add("significant_beneficial_owner_3_first_name");
+        list.add("significant_beneficial_owner_3_last_name");
+        list.add("significant_beneficial_owner_3_identification_number");
+        list.add("significant_beneficial_owner_3_date_of_birth");
+        list.add("significant_beneficial_owner_3_street_address_1");
+        list.add("significant_beneficial_owner_3_street_address_2");
+        list.add("significant_beneficial_owner_3_street_address_3");
+        list.add("significant_beneficial_owner_3_street_address_4");
+        list.add("significant_beneficial_owner_3_street_address_5");
+        list.add("significant_beneficial_owner_3_city_name");
+        list.add("significant_beneficial_owner_3_region_code_state");
+        list.add("significant_beneifical_owner_3_postal_code");
+        list.add("significant_beneficial_owner_3_country_code");
+        list.add("significant_beneficial_owner_4_first_name");
+        list.add("significant_beneficial_owner_4_last_name");
+        list.add("significant_beneficial_owner_4_identification_number");
+        list.add("significant_beneficial_owner_4_date_of_birth");
+        list.add("significant_beneficial_owner_4_street_address_1");
+        list.add("significant_beneficial_owner_4_street_address_2");
+        list.add("significant_beneficial_owner_4_street_address_3");
+        list.add("significant_beneficial_owner_4_street_address_4");
+        list.add("significant_beneficial_owner_4_street_address_5");
+        list.add("significant_beneficial_owner_4_city_name");
+        list.add("significant_beneficial_owner_4_region_code_state");
+        list.add("significant_beneficial_owner_4_postal_code");
+        list.add("significant_beneficial_owner_4_country_code");
+        list.add("sales_channel_indicator");
+        list.add("sales_channel_name");
+        list.add("sales_representative_id");
+        list.add("iso_registration_number");
+        list.add("dt2_filler1");
+        list.add("sellers_status");
+        list.add("sellers_start_date");
+        list.add("sellers_termination_date");
+        list.add("sellers_charge_volume");
+        list.add("sellers_transaction_count");
+        list.add("sellers_chargeback_count");
+        list.add("sellers_chargeback_amount");
+        list.add("dt2_filler2");
+        list.add("dt2_record_type_error_flag");
+        list.add("dt2_record_number_error_flag");
+        list.add("dt2_seller_id_error_flag");
+        list.add("authorized_signer_identification_number_error_flag");
+        list.add("authorized_signer_date_of_birth_error_flag");
+        list.add("authorized_signer_street_address_1_error_flag");
+        list.add("authorized_signer_street_address_2_error_flag");
+        list.add("authorized_signer_street_address_3_error_flag");
+        list.add("authorized_signer_street_address_4_error_flag");
+        list.add("authorized_signer_street_address_5_error_flag");
+        list.add("authorized_signer_city_name_error_flag");
+        list.add("authorized_signer_region_code_error_flag");
+        list.add("authorized_signer_postal_code_error_flag");
+        list.add("authorized_signer_country_code_error_flag");
+        list.add("significant_beneficial_owner_2_first_name_error_flag");
+        list.add("significant_beneficial_owner_2_last_name_error_flag");
+        list.add("significant_beneficial_owner_2_identification_number_error_flag");
+        list.add("significant_beneficial_owner_2_date_of_birth_error_flag");
+        list.add("significant_benifical_owner_2_street_address_1_error_flag");
+        list.add("significant_beneficial_owner_2_street_address_2_error_flag");
+        list.add("significant_beneficial_owner_2_street_address_3_error_flag");
+        list.add("significant_beneficial_owner_2_street_address_4_error_flag");
+        list.add("significant_beneficial_owner_2_street_address_5_error_flag");
+        list.add("significant_beneficial_owner_2_city_name_error_flag");
+        list.add("significantbeneficial_owner_2_region_code_error_flag");
+        list.add("significant_beneficial_owner_2_postal_code_error_flag");
+        list.add("significant_beneficial_owner_2_country_code_error_flag");
+        list.add("significant_beneficial_owner_3_first_name_error_flag");
+        list.add("significant_beneficial_owner_3_last_name_error_flag");
+        list.add("significant_beneficial_owner_3_identification_number_error_flag");
+        list.add("significant_beneficial_owner_3_date_of_birth_error_flag");
+        list.add("significant_beneficial_owner_3_street_address_1_error_flag");
+        list.add("significant_beneficial_owner_3_street_address_2_error_flag");
+        list.add("significant_beneficial_owner_3_street_address_3_error_flag");
+        list.add("significant_beneficial_owner_3_street_address_4_error_flag");
+        list.add("significant_beneficial_owner_3_street_address_5_error_flag");
+        list.add("significant_beneficial_owner_3_city_name_error_flag");
+        list.add("significant_beneficial_owner_3_region_code_error_flag");
+        list.add("significant_beneficial_owner_3_postal_code_error_flag");
+        list.add("significant_beneficial_owner_3_country_code_error_flag");
+        list.add("significant_beneficial_owner_4_first_name_error_flag");
+        list.add("significant_beneficialowner_4_last_name_error_flag");
+        list.add("significant_beneficial_owner_4_identification_number_error_flag");
+        list.add("significant_beneficial_owner_4_date_of_birth_error_flag");
+        list.add("significant_beneficial_owner_4_street_address_1_error_flag");
+        list.add("significant_beneficial_owner_4_street_address_2_error_flag");
+        list.add("significant_beneficial_owner_4_street_address_3_error_flag");
+        list.add("significant_beneficial_owner_4_street_address_4_error_flag");
+        list.add("significant_beneficial_owner_4_street_address_5_error_flag");
+        list.add("significant_beneficial_owner_4_city_name_error_flag");
+        list.add("significant_beneficial_owner_4_region_code_error_flag");
+        list.add("significant_beneficial_owner_4_postal_code_error_flag");
+        list.add("significant_beneficial_owner_4_country_code_error_flag");
+        list.add("sales_channel_indicator_error_flag");
+        list.add("sales_channel_name_error_flag");
+        list.add("sales_representative_id_error_flag");
+        list.add("iso_registration_number_error_flag");
+        list.add("dt2_filler3");
+        list.add("sellers_status_error_flag");
+        list.add("sellers_start_date_error_flag");
+        list.add("sellers_termination_date_error_flag");
+        list.add("sellers_charge_volume_error_flag");
+        list.add("sellers_transaction_count_error_flag");
+        list.add("sellers_chargeback_count_error_flag");
+        list.add("sellers_chargeback_amount_error_flag");
+        list.add("dt2_filler4");
+        return list;
+    }
+
+    public static List<String> getHeader1ColumnList() {
+        List<String> list = new ArrayList<> ();
+        list.add("header_pt_1");
+        return list;
+    }
+    public static List<String> getHeader2ColumnList() {
+        List<String> list = new ArrayList<> ();
+        list.add("header_pt_2");
+        return list;
+    }
+
+
+    public static Connection connectToCloudSql(String url, String username, String password) throws SQLException {
+        try {
+            return DriverManager.getConnection(url, username, password);
+        } catch (SQLException s) {
+            log.error(String.format("SQL exception. Could not establish connection to Cloud SQL: %s", s.toString()));
+            return null;
+        } catch (Exception e) {
+            log.error(String.format("Exception. Could not establish connection to Cloud SQL: %s", e.toString()));
+            return null;
+        }
+    }
+}
+
+
