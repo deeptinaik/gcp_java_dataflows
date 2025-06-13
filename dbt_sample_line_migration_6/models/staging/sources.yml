@@ -1,0 +1,36 @@
+version: 2
+
+sources:
+  - name: source_system
+    description: "Source tables from the original BigQuery system"
+    database: "{{ env_var('SNOWFLAKE_DATABASE') }}"
+    schema: source_layer
+    
+    tables:
+      - name: orders
+        description: "Raw orders data with order items"
+        columns:
+          - name: order_id
+            description: "Unique identifier for each order"
+            tests:
+              - not_null
+          - name: customer_id
+            description: "Customer identifier"
+            tests:
+              - not_null
+          - name: order_date
+            description: "Date when the order was placed"
+            tests:
+              - not_null
+          - name: product_id
+            description: "Product identifier for the ordered item"
+            tests:
+              - not_null
+          - name: quantity
+            description: "Quantity of the product ordered"
+            tests:
+              - not_null
+          - name: price
+            description: "Price of the product"
+            tests:
+              - not_null
