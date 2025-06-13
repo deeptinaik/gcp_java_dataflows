@@ -1,0 +1,44 @@
+version: 2
+
+sources:
+  - name: sales_raw
+    description: Raw sales data from the original BigQuery source
+    schema: source_layer
+    tables:
+      - name: orders
+        description: Orders table containing order details with product information
+        columns:
+          - name: order_id
+            description: Unique identifier for each order
+            tests:
+              - not_null
+              - unique
+          
+          - name: customer_id
+            description: Unique identifier for the customer
+            tests:
+              - not_null
+          
+          - name: order_date
+            description: Date when the order was placed
+            tests:
+              - not_null
+          
+          - name: product_id
+            description: Unique identifier for the product
+            tests:
+              - not_null
+          
+          - name: quantity
+            description: Quantity of product ordered
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 1
+          
+          - name: price
+            description: Price of the product
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 0

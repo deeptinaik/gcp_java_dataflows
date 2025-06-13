@@ -1,0 +1,131 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: >
+      Staging model for orders data. Cleans and standardizes the source orders 
+      data with proper data type casting and basic quality filters.
+    
+    columns:
+      - name: order_id
+        description: Unique identifier for each order
+        tests:
+          - not_null
+          - unique
+      
+      - name: customer_id
+        description: Unique identifier for the customer
+        tests:
+          - not_null
+      
+      - name: order_date
+        description: Date when the order was placed
+        tests:
+          - not_null
+      
+      - name: product_id
+        description: Unique identifier for the product
+        tests:
+          - not_null
+      
+      - name: quantity
+        description: Quantity of product ordered
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+      
+      - name: price
+        description: Price of the product
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+
+  - name: stg_sales
+    description: >
+      Staging model for sales aggregation. Converts order items into structured 
+      arrays per order, replacing BigQuery ARRAY_AGG(STRUCT) with Snowflake equivalent.
+    
+    columns:
+      - name: order_id
+        description: Unique identifier for each order
+        tests:
+          - not_null
+          - unique
+      
+      - name: customer_id
+        description: Unique identifier for the customer
+        tests:
+          - not_null
+      
+      - name: order_date
+        description: Date when the order was placed
+        tests:
+          - not_null
+      
+      - name: items
+        description: Array of order items with product details
+        tests:
+          - not_null
+
+  - name: stg_customer_totals
+    description: >
+      Staging model for customer totals calculation. Calculates total spending 
+      and order count per customer using Snowflake LATERAL FLATTEN.
+    
+    columns:
+      - name: customer_id
+        description: Unique identifier for the customer
+        tests:
+          - not_null
+          - unique
+      
+      - name: total_spent
+        description: Total amount spent by the customer
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      
+      - name: total_orders
+        description: Total number of orders placed by the customer
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+
+  - name: stg_ranked_orders
+    description: >
+      Staging model for ranked orders calculation. Ranks orders by date for each 
+      customer and calculates order totals.
+    
+    columns:
+      - name: order_id
+        description: Unique identifier for each order
+        tests:
+          - not_null
+      
+      - name: customer_id
+        description: Unique identifier for the customer
+        tests:
+          - not_null
+      
+      - name: order_date
+        description: Date when the order was placed
+        tests:
+          - not_null
+      
+      - name: order_total
+        description: Total amount for this order
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      
+      - name: order_rank
+        description: Rank of order by date (1 = most recent)
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
