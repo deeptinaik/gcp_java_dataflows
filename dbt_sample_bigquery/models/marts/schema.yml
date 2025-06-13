@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: sales_analysis
+    description: Customer sales analysis with spending tiers and recent order history
+    columns:
+      - name: customer_id
+        description: Unique customer identifier
+        tests:
+          - not_null
+          - unique
+      - name: total_spent
+        description: Total amount spent by the customer across all orders
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: total_orders
+        description: Total number of orders placed by the customer
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+      - name: last_3_orders
+        description: Array containing details of the customer's last 3 orders
+        tests:
+          - not_null
+      - name: customer_tier
+        description: Customer tier classification based on total spending
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['VIP', 'Preferred', 'Standard']
+      - name: dbt_load_timestamp
+        description: Timestamp when the record was first loaded by DBT
+        tests:
+          - not_null
+      - name: dbt_update_timestamp
+        description: Timestamp when the record was last updated by DBT
+        tests:
+          - not_null
