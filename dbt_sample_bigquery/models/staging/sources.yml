@@ -1,0 +1,36 @@
+version: 2
+
+sources:
+  - name: raw_sales
+    description: Raw sales data from the source system
+    tables:
+      - name: orders
+        description: Orders table containing order details with items
+        columns:
+          - name: order_id
+            description: Unique identifier for each order
+            tests:
+              - not_null
+              - unique
+          - name: customer_id
+            description: Customer identifier
+            tests:
+              - not_null
+          - name: order_date
+            description: Date when the order was placed
+            tests:
+              - not_null
+          - name: product_id
+            description: Product identifier within the order
+          - name: quantity
+            description: Quantity of the product ordered
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 0
+          - name: price
+            description: Price per unit of the product
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 0
