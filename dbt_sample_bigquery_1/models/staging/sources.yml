@@ -1,0 +1,42 @@
+version: 2
+
+sources:
+  - name: raw_sales_data
+    description: "Raw sales and orders data from the source system"
+    database: "{{ env_var('SNOWFLAKE_DATABASE') }}"
+    schema: raw_data
+    tables:
+      - name: orders
+        description: "Order transaction data with customer, product, and pricing information"
+        columns:
+          - name: order_id
+            description: "Unique identifier for each order"
+            tests:
+              - not_null
+              - unique
+          - name: customer_id
+            description: "Unique identifier for each customer"
+            tests:
+              - not_null
+          - name: order_date
+            description: "Date when the order was placed"
+            tests:
+              - not_null
+          - name: product_id
+            description: "Unique identifier for each product"
+            tests:
+              - not_null
+          - name: quantity
+            description: "Quantity of product ordered"
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 0
+                  inclusive: false
+          - name: price
+            description: "Unit price of the product"
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 0
+                  inclusive: false
