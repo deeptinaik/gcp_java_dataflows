@@ -1,0 +1,9 @@
+target/
+dbt_packages/
+logs/
+.user.yml
+.env
+*.pyc
+.DS_Store
+.vscode/
+.idea/
