@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: customer_analytics
+    description: "Customer analytics with spending patterns, order history, and tier classification"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for customer"
+        tests:
+          - not_null
+          - unique
+      - name: total_spent
+        description: "Total amount spent by customer across all orders"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: total_orders
+        description: "Total number of orders placed by customer"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: last_3_orders
+        description: "Array of customer's most recent orders (up to 3)"
+        tests:
+          - not_null
+      - name: customer_tier
+        description: "Customer tier classification based on spending"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['VIP', 'Preferred', 'Standard']
+      - name: created_date
+        description: "Timestamp when record was created"
+        tests:
+          - not_null
+      - name: etl_batch_id
+        description: "ETL batch identifier for auditing"
+        tests:
+          - not_null
