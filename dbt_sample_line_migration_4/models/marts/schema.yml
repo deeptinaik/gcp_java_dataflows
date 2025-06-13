@@ -1,0 +1,60 @@
+version: 2
+
+models:
+  - name: customer_sales_analysis
+    description: "Final customer sales analysis with tier classification and recent orders"
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier"
+        tests:
+          - not_null
+          - unique
+      - name: total_spent
+        description: "Total amount spent by customer"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: false
+      - name: total_orders
+        description: "Total number of orders placed by customer"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: false
+      - name: total_items
+        description: "Total number of items purchased by customer"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: false
+      - name: customer_tier
+        description: "Customer tier based on spending (VIP, Preferred, Standard)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['VIP', 'Preferred', 'Standard']
+      - name: avg_order_value
+        description: "Average value per order"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: false
+      - name: avg_item_value
+        description: "Average value per item"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: false
+      - name: etl_created_timestamp
+        description: "Timestamp when record was created"
+        tests:
+          - not_null
+      - name: etl_batch_id
+        description: "ETL batch identifier"
+        tests:
+          - not_null

@@ -1,0 +1,40 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: "Source data for customer sales analysis"
+    schema: "{{ var('source_schema') }}"
+    tables:
+      - name: orders
+        description: "Raw orders data with product details"
+        columns:
+          - name: order_id
+            description: "Unique identifier for each order"
+            tests:
+              - not_null
+          - name: customer_id
+            description: "Unique identifier for customer"
+            tests:
+              - not_null
+          - name: order_date
+            description: "Date when order was placed"
+            tests:
+              - not_null
+          - name: product_id
+            description: "Product identifier"
+            tests:
+              - not_null
+          - name: quantity
+            description: "Quantity of product ordered"
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 0
+                  inclusive: false
+          - name: price
+            description: "Price per unit of product"
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 0
+                  inclusive: false
