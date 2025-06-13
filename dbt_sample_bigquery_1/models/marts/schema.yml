@@ -1,0 +1,79 @@
+version: 2
+
+models:
+  - name: customer_analysis
+    description: "Comprehensive customer analysis with tier classification and recent order history"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer"
+        tests:
+          - not_null
+          - unique
+      - name: total_spent
+        description: "Total amount spent by customer across all orders"
+        tests:
+          - not_null
+          - expression_is_true:
+              expression: ">= 0"
+              config:
+                severity: error
+      - name: total_orders
+        description: "Total number of orders placed by customer"
+        tests:
+          - not_null
+          - expression_is_true:
+              expression: "> 0"
+              config:
+                severity: error
+      - name: first_order_date
+        description: "Date of customer's first order"
+        tests:
+          - not_null
+      - name: last_order_date
+        description: "Date of customer's most recent order"
+        tests:
+          - not_null
+      - name: avg_order_value
+        description: "Average order value for the customer"
+        tests:
+          - not_null
+          - expression_is_true:
+              expression: "> 0"
+              config:
+                severity: error
+      - name: customer_tier
+        description: "Customer tier classification based on total spending"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['VIP', 'Preferred', 'Standard']
+              config:
+                severity: error
+      - name: last_3_orders
+        description: "Array of customer's last 3 orders"
+        tests:
+          - not_null
+      - name: customer_lifetime_days
+        description: "Number of days between first and last order"
+        tests:
+          - not_null
+          - expression_is_true:
+              expression: ">= 0"
+              config:
+                severity: error
+      - name: customer_status
+        description: "Customer activity status based on recency"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Active', 'At Risk', 'Inactive']
+              config:
+                severity: error
+      - name: etl_created_at
+        description: "Timestamp when record was created"
+        tests:
+          - not_null
+      - name: etl_batch_id
+        description: "Batch ID for ETL process tracking"
+        tests:
+          - not_null

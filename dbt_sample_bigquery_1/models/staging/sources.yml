@@ -1,0 +1,35 @@
+version: 2
+
+sources:
+  - name: source_database
+    description: "Source data for sample BigQuery 1 analysis"
+    schema: raw_data
+    tables:
+      - name: orders
+        description: "Orders table containing transaction details"
+        columns:
+          - name: order_id
+            description: "Unique identifier for each order"
+            tests:
+              - not_null
+              - unique
+          - name: customer_id
+            description: "Unique identifier for each customer"
+            tests:
+              - not_null
+          - name: order_date
+            description: "Date when the order was placed"
+            tests:
+              - not_null
+          - name: product_id
+            description: "Unique identifier for each product"
+            tests:
+              - not_null
+          - name: quantity
+            description: "Quantity of products ordered"
+            tests:
+              - not_null
+          - name: price
+            description: "Price per unit of the product"
+            tests:
+              - not_null
