@@ -1,0 +1,122 @@
+version: 2
+
+models:
+  - name: customer_analysis
+    description: "Final customer analysis with spending totals, order counts, recent orders, and customer tier classification"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer"
+        tests:
+          - not_null
+          - unique
+      
+      - name: total_spent
+        description: "Total amount spent by the customer across all orders"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+              config:
+                severity: error
+      
+      - name: total_orders
+        description: "Total number of distinct orders placed by the customer"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 1"
+              config:
+                severity: error
+      
+      - name: last_3_orders
+        description: "Array of the customer's most recent orders (up to 3)"
+        tests:
+          - not_null
+      
+      - name: customer_tier
+        description: "Customer tier classification based on total spending"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['VIP', 'Preferred', 'Standard']
+              config:
+                severity: error
+
+  - name: stg_sales_orders
+    description: "Staging model for sales orders with aggregated product items"
+    columns:
+      - name: order_id
+        description: "Unique identifier for each order"
+        tests:
+          - not_null
+          - unique
+      
+      - name: customer_id
+        description: "Unique identifier for each customer"
+        tests:
+          - not_null
+      
+      - name: order_date
+        description: "Date when the order was placed"
+        tests:
+          - not_null
+      
+      - name: items
+        description: "Array of product items in the order"
+        tests:
+          - not_null
+
+  - name: stg_customer_totals
+    description: "Staging model with customer spending and order totals"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer"
+        tests:
+          - not_null
+          - unique
+      
+      - name: total_spent
+        description: "Total amount spent by the customer"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      
+      - name: total_orders
+        description: "Total number of orders for the customer"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 1"
+
+  - name: stg_ranked_orders
+    description: "Staging model with orders ranked by date for each customer"
+    columns:
+      - name: order_id
+        description: "Unique identifier for each order"
+        tests:
+          - not_null
+      
+      - name: customer_id
+        description: "Unique identifier for each customer"
+        tests:
+          - not_null
+      
+      - name: order_date
+        description: "Date when the order was placed"
+        tests:
+          - not_null
+      
+      - name: order_total
+        description: "Total amount for this specific order"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      
+      - name: order_rank
+        description: "Rank of order by date (1 = most recent)"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 1"
