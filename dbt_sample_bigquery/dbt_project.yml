@@ -1,0 +1,62 @@
+name: 'sample_bigquery'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'sample_bigquery'
+
+# These configurations specify where dbt should look for different types of files.
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+# Configuring models
+models:
+  sample_bigquery:
+    # Configuration for all models in this project
+    +materialized: table
+    
+    staging:
+      # Configuration for staging models - source data preparation
+      +materialized: view
+      +schema: staging_layer
+    
+    intermediate:
+      # Configuration for intermediate models - business logic transformations
+      +materialized: ephemeral
+    
+    marts:
+      # Configuration for mart models - final output tables
+      +materialized: table
+      +schema: analytics_layer
+
+# Global variables that can be referenced in models
+vars:
+  # Default values for common fields
+  current_timestamp_format: 'yyyy-MM-dd HH:mm:ss'
+  date_format: 'yyyy-MM-dd'
+  
+  # Customer tier thresholds
+  vip_threshold: 10000
+  preferred_threshold: 5000
+  
+  # Order analysis configuration
+  max_recent_orders: 3
+
+# Test configurations
+tests:
+  +store_failures: true
+  +schema_tests: true
+
+# Package dependencies
+packages:
+  - package: dbt-labs/dbt_utils
+    version: 1.1.1
