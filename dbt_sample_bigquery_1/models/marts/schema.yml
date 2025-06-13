@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: customer_analysis
+    description: "Customer analysis with sales data, order history, and tier classification"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for the customer"
+        tests:
+          - not_null
+          - unique
+      - name: total_spent
+        description: "Total amount spent by customer across all orders"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: total_orders
+        description: "Total number of orders placed by customer"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: last_3_orders
+        description: "Array of customer's last 3 orders with details"
+        tests:
+          - not_null
+      - name: customer_tier
+        description: "Customer tier classification based on total spending"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['VIP', 'Preferred', 'Standard']
