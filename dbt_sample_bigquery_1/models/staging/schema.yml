@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: "Staging model for orders data with data quality filters and audit fields"
+    columns:
+      - name: order_id
+        description: "Unique identifier for orders"
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: "Customer identifier"
+        tests:
+          - not_null
+      - name: order_date
+        description: "Date when the order was placed"
+        tests:
+          - not_null
+      - name: product_id
+        description: "Product identifier"
+        tests:
+          - not_null
+      - name: quantity
+        description: "Quantity of products ordered"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: price
+        description: "Price per unit of product"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: line_total
+        description: "Total value of the order line (quantity * price)"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"

@@ -1,0 +1,14 @@
+target/
+dbt_packages/
+logs/
+.env
+.user.yml
+.DS_Store
+*.pyc
+__pycache__/
+.pytest_cache/
+.vscode/
+.idea/
+*.log
+*.pid
+.dbt/
