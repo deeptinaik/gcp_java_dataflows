@@ -1,0 +1,80 @@
+name: 'dbt_sample_bigquery'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'sample_bigquery'
+
+# These configurations specify where dbt should look for different types of files.
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+# Configuring models
+models:
+  dbt_sample_bigquery:
+    # Configuration for all models in this project
+    +materialized: table
+    
+    staging:
+      # Configuration for staging models - raw data processing
+      +materialized: view
+      +schema: staging_layer
+    
+    intermediate:
+      # Configuration for intermediate transformation models
+      +materialized: ephemeral
+    
+    marts:
+      # Configuration for final mart models - analytics output
+      +materialized: table
+      +unique_key: 'customer_id'
+      +schema: analytics_layer
+
+# Source configurations
+sources:
+  dbt_sample_bigquery:
+    +database: 'SAMPLE_WAREHOUSE'
+    +schema: 'TRUSTED_LAYER'
+
+# Global variables that can be referenced in models
+vars:
+  # Customer tier thresholds
+  vip_threshold: 10000
+  preferred_threshold: 5000
+  
+  # Analysis parameters
+  max_last_orders: 3
+  
+  # Runtime parameters
+  etl_batch_date: '{{ run_started_at.strftime("%Y-%m-%d") }}'
+
+# Test configurations
+tests:
+  +store_failures: true
+  +schema_tests: true
+  
+# Macro configurations
+macros:
+  dbt_sample_bigquery:
+    +docs:
+      show: true
+
+# Documentation
+docs:
+  +render: true
+
+# Snapshots configuration
+snapshots:
+  dbt_sample_bigquery:
+    +target_schema: 'SNAPSHOTS'
+    +strategy: 'timestamp'
+    +updated_at: 'update_date_time'

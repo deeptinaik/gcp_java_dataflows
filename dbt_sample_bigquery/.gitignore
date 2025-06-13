@@ -1,0 +1,37 @@
+# DBT artifacts
+target/
+dbt_packages/
+logs/
+
+# OS artifacts
+.DS_Store
+.vscode/
+*.log
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Snowflake connection files (if storing locally)
+*.p8
+*.pem
+
+# IDE files
+.idea/
+*.swp
+*.swo
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+*.temp

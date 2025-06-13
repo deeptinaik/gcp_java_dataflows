@@ -1,0 +1,70 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: "Staging model for orders data with basic data quality filters"
+    columns:
+      - name: order_id
+        description: "Unique identifier for each order"
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: "Unique identifier for the customer"
+        tests:
+          - not_null
+      - name: order_date
+        description: "Date when the order was placed"
+        tests:
+          - not_null
+      - name: product_id
+        description: "Unique identifier for the product"
+        tests:
+          - not_null
+      - name: quantity
+        description: "Quantity of the product ordered"
+        tests:
+          - not_null
+      - name: price
+        description: "Price per unit of the product"
+        tests:
+          - not_null
+
+  - name: customer_analytics
+    description: "Final customer analytics with spending totals, order history, and tier classification"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for the customer"
+        tests:
+          - not_null
+          - unique
+      - name: total_spent
+        description: "Total amount spent by the customer across all orders"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: total_orders
+        description: "Total number of orders placed by the customer"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+      - name: last_3_orders
+        description: "Array of the last 3 orders with order details"
+        tests:
+          - not_null
+      - name: customer_tier
+        description: "Customer tier classification based on total spending"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['VIP', 'Preferred', 'Standard']
+      - name: created_at
+        description: "Timestamp when the record was created"
+        tests:
+          - not_null
+      - name: batch_date
+        description: "Date of the ETL batch processing"
+        tests:
+          - not_null
