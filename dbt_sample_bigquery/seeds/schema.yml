@@ -1,0 +1,33 @@
+version: 2
+
+seeds:
+  - name: sample_orders_data
+    description: "Sample order data for testing the sales analytics pipeline"
+    config:
+      schema: source_layer
+      alias: orders
+    columns:
+      - name: order_id
+        description: "Unique order identifier"
+        tests:
+          - not_null
+      - name: customer_id
+        description: "Customer identifier"
+        tests:
+          - not_null
+      - name: order_date
+        description: "Order placement date"
+        tests:
+          - not_null
+      - name: product_id
+        description: "Product identifier"
+        tests:
+          - not_null
+      - name: quantity
+        description: "Product quantity ordered"
+        tests:
+          - not_null
+      - name: price
+        description: "Product unit price"
+        tests:
+          - not_null

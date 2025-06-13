@@ -1,0 +1,64 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: "Staging model for orders with aggregated product items"
+    columns:
+      - name: order_id
+        description: "Unique order identifier"
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: "Customer identifier"
+        tests:
+          - not_null
+      - name: order_date
+        description: "Order placement date"
+        tests:
+          - not_null
+      - name: items
+        description: "Array of product items in the order"
+        tests:
+          - not_null
+
+  - name: int_customer_totals
+    description: "Intermediate model calculating customer spending totals"
+    columns:
+      - name: customer_id
+        description: "Customer identifier"
+        tests:
+          - not_null
+          - unique
+      - name: total_spent
+        description: "Total amount spent by customer"
+        tests:
+          - not_null
+      - name: total_orders
+        description: "Total number of orders placed by customer"
+        tests:
+          - not_null
+
+  - name: int_ranked_orders
+    description: "Intermediate model with orders ranked by date for each customer"
+    columns:
+      - name: order_id
+        description: "Unique order identifier"
+        tests:
+          - not_null
+      - name: customer_id
+        description: "Customer identifier"
+        tests:
+          - not_null
+      - name: order_date
+        description: "Order placement date"
+        tests:
+          - not_null
+      - name: order_total
+        description: "Total order value"
+        tests:
+          - not_null
+      - name: order_rank
+        description: "Order rank by date within customer"
+        tests:
+          - not_null
