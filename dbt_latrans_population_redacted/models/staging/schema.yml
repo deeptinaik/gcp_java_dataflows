@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: stg_latrans_ft_source
+    description: "Staging model for LA Trans FT source data with field transformations"
+    columns:
+      - name: la_trans_ft_uuid
+        description: "Unique identifier for each transaction"
+      - name: etl_batch_date
+        description: "ETL batch date for processing control"
+      - name: hierarchy
+        description: "Concatenated hierarchy string (corp,region,principal,associate,chain)"
+      - name: merchant_number_int
+        description: "Merchant number converted to integer format"
+      - name: transaction_date
+        description: "Transaction date in YYYY-MM-DD format"
+      - name: transaction_amount
+        description: "Transaction amount scaled to decimal format"
+
+  - name: stg_dim_merchant_info
+    description: "Staging model for merchant information dimension"
+    columns:
+      - name: merchant_number
+        description: "Merchant number identifier"
+      - name: merchant_information_sk
+        description: "Merchant information surrogate key"
+
+  - name: stg_dim_default_currency
+    description: "Staging model for default currency lookup"
+    columns:
+      - name: ddc_corporate_region
+        description: "Composite key for corporate and region"
+      - name: ddc_currency_code
+        description: "Default currency code"
+
+  - name: stg_dim_iso_numeric_currency_code
+    description: "Staging model for ISO numeric currency codes"
+    columns:
+      - name: dincc_currency_code
+        description: "Alpha currency code"
+      - name: dincc_iso_numeric_currency_code
+        description: "ISO numeric currency code"
+      - name: dincc_iso_numeric_currency_code_sk
+        description: "ISO numeric currency code surrogate key"
+
+sources:
+  - name: trusted_layer
+    description: "Trusted layer containing source transaction data"
+    tables:
+      - name: la_trans_ft
+        description: "LA Trans FT source table"
+        loaded_at_field: create_date_time
+        freshness:
+          warn_after: {count: 1, period: day}
+          error_after: {count: 2, period: day}
+
+  - name: transformed_layer
+    description: "Transformed layer containing dimension tables"
+    tables:
+      - name: dim_merchant_info
+        description: "Merchant information dimension"
+      - name: dim_default_curr
+        description: "Default currency dimension"
+      - name: dim_iso_numeric_curr_code
+        description: "ISO numeric currency code dimension"
+      - name: dim_corporate
+        description: "Corporate hierarchy dimension"
+      - name: dim_region
+        description: "Region hierarchy dimension"
+      - name: dim_principal
+        description: "Principal hierarchy dimension"
+      - name: dim_associate
+        description: "Associate hierarchy dimension"
+      - name: dim_chain
+        description: "Chain hierarchy dimension"

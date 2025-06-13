@@ -1,0 +1,163 @@
+version: 2
+
+sources:
+  - name: xl_layer
+    description: "Source data layer containing transaction and authorization data"
+    schema: xl_layer
+    tables:
+      - name: lcot_uid_key_ukrg
+        description: "LCOT UID key table containing UK region data for authorization and transaction matching"
+        columns:
+          - name: etlbatchid_dif
+            description: "ETL batch ID for difference processing"
+            tests:
+              - not_null
+          - name: etlbatchid_auth
+            description: "ETL batch ID for authorization processing"
+            tests:
+              - not_null
+          - name: trans_sk
+            description: "Transaction surrogate key"
+          - name: auth_sk
+            description: "Authorization surrogate key"
+          - name: global_trid
+            description: "Global transaction ID for matching"
+          - name: global_trid_source
+            description: "Source of global transaction ID"
+          - name: corp
+            description: "Corporate identifier"
+          - name: region
+            description: "Region identifier"
+          - name: principal
+            description: "Principal identifier"
+          - name: associate
+            description: "Associate identifier"
+          - name: chain
+            description: "Chain identifier"
+          - name: etlbatchid_date
+            description: "ETL batch date for filtering"
+
+      - name: vw_north_uk_authorization_fin_ft
+        description: "View containing UK North authorization financial data"
+        columns:
+          - name: north_uk_authorization_fin_ft_sk
+            description: "North UK authorization financial fact surrogate key"
+            tests:
+              - not_null
+              - unique
+          - name: merchant_number
+            description: "Merchant identification number"
+          - name: amount_1x
+            description: "Transaction amount (1x)"
+          - name: network_reference_number
+            description: "Network reference number for transaction"
+          - name: approval_code
+            description: "Authorization approval code"
+          - name: tran_date
+            description: "Transaction date"
+          - name: card_number_sk
+            description: "Card number surrogate key"
+          - name: global_token
+            description: "Global token for security"
+          - name: card_number_rk
+            description: "Card number reference key"
+          - name: tran_time
+            description: "Transaction time"
+          - name: terminal_id
+            description: "Terminal identification"
+          - name: sequence_number
+            description: "Transaction sequence number"
+          - name: response_code
+            description: "Authorization response code"
+          - name: settle_date_month
+            description: "Settlement date month"
+          - name: record_type
+            description: "Record type indicator"
+          - name: rec_type
+            description: "Record type classification"
+          - name: excep_reason_code
+            description: "Exception reason code"
+          - name: retrieval_ref_number
+            description: "Retrieval reference number"
+          - name: etlbatchid
+            description: "ETL batch identifier"
+          - name: global_trid
+            description: "Global transaction ID"
+          - name: global_trid_source
+            description: "Source of global transaction ID"
+
+      - name: vw_ukrg_tran_fact
+        description: "View containing UK region transaction fact data"
+        columns:
+          - name: card_scheme_diff
+            description: "Card scheme for difference processing"
+          - name: global_trid_diff
+            description: "Global transaction ID for difference matching"
+          - name: global_trid_source_diff
+            description: "Source of global transaction ID for difference"
+          - name: merchant_number
+            description: "Merchant identification number"
+          - name: tran_amount
+            description: "Transaction amount"
+          - name: tran_date
+            description: "Transaction date"
+          - name: tran_time
+            description: "Transaction time"
+          - name: card_number_sk
+            description: "Card number surrogate key"
+          - name: authorization_response_code
+            description: "Authorization response code"
+          - name: terminal_id
+            description: "Terminal identification"
+          - name: etlbatchid
+            description: "ETL batch identifier"
+
+      - name: lcot_config_details
+        description: "LCOT configuration details for application settings"
+        columns:
+          - name: corporate
+            description: "Corporate identifier"
+            tests:
+              - not_null
+          - name: application_name
+            description: "Application name"
+            tests:
+              - not_null
+              - accepted_values:
+                  values: ['eu_mpg_s', 'uk_mpg_s', 'us_mpg_s']
+          - name: current_ind
+            description: "Current indicator flag"
+            tests:
+              - not_null
+              - accepted_values:
+                  values: [0, 1]
+
+  - name: consumption_layer
+    description: "Consumption data layer containing dimension tables"
+    schema: consumption_layer
+    tables:
+      - name: dim_merchant_information
+        description: "Dimension table containing merchant information and hierarchy"
+        columns:
+          - name: merchant_number
+            description: "Merchant identification number"
+            tests:
+              - not_null
+          - name: corporate
+            description: "Corporate identifier"
+          - name: region
+            description: "Region identifier"
+          - name: principal
+            description: "Principal identifier"
+          - name: associate
+            description: "Associate identifier"
+          - name: chain
+            description: "Chain identifier"
+          - name: dba_name
+            description: "Doing business as name"
+          - name: current_ind
+            description: "Current indicator flag"
+            tests:
+              - not_null
+              - accepted_values:
+                  values: ['0', '1']

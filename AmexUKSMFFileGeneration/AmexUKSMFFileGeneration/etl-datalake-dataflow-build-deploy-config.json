@@ -1,0 +1,13 @@
+{
+  "configtoken": {
+    "AmexUKSMFFileGeneration" : {
+      "main_class" : "com.globalpayments.batch.pipeline.AmexUKSMFFileGeneration",
+      "class_folder_name" : "src/Amex/UK/AmexUKSMFFileGeneration",
+      "template_name" : "AmexUKSMFFileGeneration",
+      "template_folder" : "AMEX_UK/SMF",
+      "extra_params" : "--maxNumWorkers=20 --workerCacheMb=2000",
+      "workerMachineType" : "n1-standard-8",
+      "build_flag" : "1"
+    }
+  }
+}

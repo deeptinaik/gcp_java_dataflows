@@ -1,0 +1,69 @@
+name: 'latrans_population_redacted'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'latrans_population_redacted'
+
+# These configurations specify where dbt should look for different types of files.
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+# Configuring models
+models:
+  latrans_population_redacted:
+    # Configuration for all models in this project
+    +materialized: table
+    
+    staging:
+      # Configuration for staging models
+      +materialized: view
+    
+    intermediate:
+      # Configuration for intermediate transformation models
+      +materialized: view
+    
+    marts:
+      # Configuration for final mart models
+      +materialized: table
+      +unique_key: 'la_trans_ft_uuid'
+
+# Global variables that can be referenced in models
+vars:
+  # Date format constants (from CommonUtil.java)
+  date_format_yyyymmdd: 'yyyyMMdd'
+  date_format_mmddyy: 'MMddyy'
+  date_format_yymmdd: 'yyMMdd'
+  date_format_yyyy_mm_dd: 'yyyy-MM-dd'
+  
+  # Amount calculation exponent (from FieldTransformation.java)
+  amount_exponent: 5
+  
+  # Default values
+  dmx_lookup_failure: '-2'
+  dmx_lookup_null_blank: '-1'
+  current_ind_active: '0'
+
+# Test configurations
+tests:
+  +store_failures: true
+  +schema_tests: true
+  
+# Macro configurations
+macros:
+  latrans_population_redacted:
+    +docs:
+      show: true
+
+# Documentation
+docs:
+  +render: true

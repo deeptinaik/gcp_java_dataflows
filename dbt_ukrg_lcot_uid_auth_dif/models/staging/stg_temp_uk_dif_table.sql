@@ -78,7 +78,7 @@ trans_base AS (
             ft.card_scheme,
             ft.global_trid,
             ft.global_trid_source
-        FROM xl_layer.vw_ukrg_tran_fact ft 
+        FROM {{ source('xl_layer', 'vw_ukrg_tran_fact') }} ft 
         JOIN {{ ref('stg_uk_mpg_scorp') }} uk 
             ON uk.corporate != ft.corporate
         CROSS JOIN filter_dates
@@ -94,7 +94,7 @@ trans_base AS (
             T1.trans_sk,
             T1.lcot_guid_key_sk,
             MAX(T1.auth_sk) AS auth_sk
-        FROM xl_layer.lcot_uid_key_ukrg T1
+        FROM {{ source('xl_layer', 'lcot_uid_key_ukrg') }} T1
         CROSS JOIN filter_dates
         WHERE
             T1.trans_sk <> '-1' 

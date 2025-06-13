@@ -1,0 +1,56 @@
+latrans_population_redacted:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: YOUR_SNOWFLAKE_ACCOUNT
+      user: YOUR_USERNAME
+      password: YOUR_PASSWORD
+      # Or use key pair authentication:
+      # private_key_path: /path/to/private_key.p8
+      # private_key_passphrase: YOUR_PASSPHRASE
+      role: YOUR_ROLE
+      database: YOUR_DATABASE
+      warehouse: YOUR_WAREHOUSE
+      schema: dev_latrans_ft
+      threads: 4
+      keepalives_idle: 240
+      search_path: YOUR_DATABASE.dev_latrans_ft
+      
+    staging:
+      type: snowflake
+      account: YOUR_SNOWFLAKE_ACCOUNT
+      user: YOUR_USERNAME
+      password: YOUR_PASSWORD
+      # Or use key pair authentication:
+      # private_key_path: /path/to/private_key.p8
+      # private_key_passphrase: YOUR_PASSPHRASE
+      role: YOUR_ROLE
+      database: YOUR_DATABASE
+      warehouse: YOUR_WAREHOUSE
+      schema: staging_latrans_ft
+      threads: 4
+      keepalives_idle: 240
+      search_path: YOUR_DATABASE.staging_latrans_ft
+      
+    production:
+      type: snowflake
+      account: YOUR_SNOWFLAKE_ACCOUNT
+      user: YOUR_USERNAME
+      password: YOUR_PASSWORD
+      # Or use key pair authentication:
+      # private_key_path: /path/to/private_key.p8
+      # private_key_passphrase: YOUR_PASSPHRASE
+      role: YOUR_ROLE
+      database: YOUR_DATABASE
+      warehouse: YOUR_WAREHOUSE
+      schema: transformed_layer
+      threads: 8
+      keepalives_idle: 240
+      search_path: YOUR_DATABASE.transformed_layer
+
+# Configuration notes:
+# - Replace YOUR_* placeholders with actual Snowflake connection details
+# - For production, the schema should match the target table schema (transformed_layer)
+# - Adjust thread counts based on your Snowflake warehouse size
+# - Consider using environment variables for sensitive information like passwords
