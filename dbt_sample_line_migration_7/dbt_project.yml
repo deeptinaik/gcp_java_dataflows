@@ -1,0 +1,58 @@
+name: 'sample_line_migration_7'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'sample_line_migration_7'
+
+# These configurations specify where dbt should look for different types of files.
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+# Configuring models
+models:
+  sample_line_migration_7:
+    # Configuration for all models in this project
+    +materialized: table
+    
+    staging:
+      # Configuration for staging models - represents source data abstraction
+      +materialized: view
+      +schema: staging_layer
+    
+    intermediate:
+      # Configuration for intermediate models - reusable transformation components
+      +materialized: ephemeral
+    
+    marts:
+      # Configuration for mart models - represents final output
+      +materialized: table
+      +schema: customer_analytics
+
+# Global variables that can be referenced in models
+vars:
+  # Default values for common fields
+  current_timestamp_format: 'yyyy-MM-dd HH:mm:ss'
+  date_format: 'yyyy-MM-dd'
+  etl_batch_id: "{{ run_started_at.strftime('%Y%m%d%H%M%S') }}"
+  
+  # Customer tier thresholds
+  vip_threshold: 10000
+  preferred_threshold: 5000
+  
+  # Analysis parameters
+  recent_orders_limit: 3
+
+# Test configurations
+tests:
+  +store_failures: true
+  +schema_tests: true
