@@ -1,0 +1,77 @@
+version: 2
+
+models:
+  - name: customer_analysis
+    description: "Customer analysis with tier classification and purchase history"
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier"
+        tests:
+          - not_null
+          - unique
+      - name: total_spent
+        description: "Total amount spent by customer"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+              config:
+                severity: error
+      - name: total_orders
+        description: "Total number of orders placed by customer"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+              config:
+                severity: warn
+      - name: total_items
+        description: "Total number of items purchased by customer"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= total_orders"
+      - name: customer_tier
+        description: "Customer tier classification"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['VIP', 'Preferred', 'Standard']
+      - name: avg_order_value
+        description: "Average order value for customer"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: spending_per_order
+        description: "Calculated spending per order"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "= total_spent / total_orders"
+              config:
+                severity: warn
+      - name: is_vip
+        description: "Flag indicating if customer is VIP"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+      - name: is_preferred_plus
+        description: "Flag indicating if customer is preferred or above"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+      - name: etl_batch_id
+        description: "ETL batch identifier"
+        tests:
+          - not_null
+      - name: created_at
+        description: "Record creation timestamp"
+        tests:
+          - not_null
+      - name: updated_at
+        description: "Record update timestamp"
+        tests:
+          - not_null
