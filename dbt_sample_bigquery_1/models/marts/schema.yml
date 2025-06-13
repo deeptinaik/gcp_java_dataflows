@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: customer_sales_analysis
+    description: "Customer sales analysis with tier classification and recent order history"
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier"
+        tests:
+          - not_null
+          - unique
+      - name: total_spent
+        description: "Total amount spent by customer across all orders"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+              config:
+                where: "customer_id IS NOT NULL"
+      - name: total_orders
+        description: "Total number of orders placed by customer"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+              config:
+                where: "customer_id IS NOT NULL"
+      - name: last_3_orders
+        description: "Array of last 3 orders with details"
+        tests:
+          - not_null
+      - name: customer_tier
+        description: "Customer tier classification based on total spending"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['VIP', 'Preferred', 'Standard']
+      - name: dbt_created_at
+        description: "Timestamp when record was created by dbt"
+        tests:
+          - not_null
+      - name: etl_batch_id
+        description: "ETL batch identifier for data lineage"
+        tests:
+          - not_null
