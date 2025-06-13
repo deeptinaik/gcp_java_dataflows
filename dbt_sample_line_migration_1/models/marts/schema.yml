@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: customer_sales_analysis
+    description: "Final customer analytics model with sales metrics and recent order history"
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier"
+        tests:
+          - not_null
+          - unique
+      - name: total_spent
+        description: "Total amount spent by customer across all orders"
+        tests:
+          - not_null
+      - name: total_orders
+        description: "Total number of orders placed by customer"
+        tests:
+          - not_null
+      - name: total_items
+        description: "Total number of items purchased by customer"
+        tests:
+          - not_null
+      - name: avg_item_value
+        description: "Average value per item purchased"
+      - name: first_order_date
+        description: "Date of customer's first order"
+        tests:
+          - not_null
+      - name: last_order_date
+        description: "Date of customer's most recent order"
+        tests:
+          - not_null
+      - name: customer_tier
+        description: "Customer segmentation tier (VIP, Preferred, Standard)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['VIP', 'Preferred', 'Standard']
+      - name: last_3_orders
+        description: "Array of up to 3 most recent orders with details"
+      - name: customer_lifetime_days
+        description: "Number of days between first and last order"
+      - name: avg_order_value
+        description: "Average value per order for the customer"
+      - name: dbt_load_timestamp
+        description: "Timestamp when record was loaded by dbt"
+        tests:
+          - not_null
+      - name: dbt_update_timestamp
+        description: "Timestamp when record was last updated by dbt"
+        tests:
+          - not_null

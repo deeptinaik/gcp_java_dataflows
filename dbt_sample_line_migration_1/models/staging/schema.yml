@@ -1,0 +1,88 @@
+version: 2
+
+models:
+  - name: stg_sales_aggregated
+    description: "Staging model for sales data with product items aggregated by order"
+    columns:
+      - name: order_id
+        description: "Unique identifier for each order"
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: "Customer identifier"
+        tests:
+          - not_null
+      - name: order_date
+        description: "Order placement date"
+        tests:
+          - not_null
+      - name: items
+        description: "Array of product items in Snowflake object format"
+      - name: order_total
+        description: "Total value of the order"
+        tests:
+          - not_null
+      - name: item_count
+        description: "Number of items in the order"
+        tests:
+          - not_null
+
+  - name: stg_customer_totals
+    description: "Staging model for customer-level aggregated metrics"
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier"
+        tests:
+          - not_null
+          - unique
+      - name: total_spent
+        description: "Total amount spent by customer"
+        tests:
+          - not_null
+      - name: total_orders
+        description: "Total number of orders placed by customer"
+        tests:
+          - not_null
+      - name: total_items
+        description: "Total number of items purchased by customer"
+        tests:
+          - not_null
+      - name: avg_item_value
+        description: "Average value per item purchased"
+      - name: first_order_date
+        description: "Date of customer's first order"
+        tests:
+          - not_null
+      - name: last_order_date
+        description: "Date of customer's most recent order"
+        tests:
+          - not_null
+
+  - name: stg_ranked_orders
+    description: "Staging model for orders ranked by recency per customer"
+    columns:
+      - name: order_id
+        description: "Unique order identifier"
+        tests:
+          - not_null
+      - name: customer_id
+        description: "Customer identifier"
+        tests:
+          - not_null
+      - name: order_date
+        description: "Order placement date"
+        tests:
+          - not_null
+      - name: order_total
+        description: "Total value of the order"
+        tests:
+          - not_null
+      - name: order_rank
+        description: "Rank of order by recency (1 = most recent)"
+        tests:
+          - not_null
+      - name: order_row_num
+        description: "Row number of order by recency"
+        tests:
+          - not_null
