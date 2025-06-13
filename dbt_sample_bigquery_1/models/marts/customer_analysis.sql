@@ -1,7 +1,6 @@
 {{ config(
     materialized='table',
-    schema='analytics_layer',
-    post_hook="INSERT INTO {{ this.schema }}.customer_analysis_audit (execution_date, record_count, etl_batch_id) VALUES ('{{ run_started_at }}', (SELECT COUNT(*) FROM {{ this }}), '{{ generate_etl_batch_id() }}')"
+    schema='analytics_layer'
 ) }}
 
 -- Final mart model: Customer Analysis

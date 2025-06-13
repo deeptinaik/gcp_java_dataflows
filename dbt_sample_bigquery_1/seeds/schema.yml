@@ -32,11 +32,11 @@ seeds:
         description: "Quantity of products ordered"
         tests:
           - not_null
-          - dbt_utils.expression_is_true:
+          - expression_is_true:
               expression: "> 0"
       - name: price
         description: "Price per unit of the product"
         tests:
           - not_null
-          - dbt_utils.expression_is_true:
+          - expression_is_true:
               expression: "> 0"

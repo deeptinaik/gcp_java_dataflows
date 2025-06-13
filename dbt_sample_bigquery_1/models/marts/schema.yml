@@ -13,7 +13,7 @@ models:
         description: "Total amount spent by customer across all orders"
         tests:
           - not_null
-          - dbt_utils.expression_is_true:
+          - expression_is_true:
               expression: ">= 0"
               config:
                 severity: error
@@ -21,7 +21,7 @@ models:
         description: "Total number of orders placed by customer"
         tests:
           - not_null
-          - dbt_utils.expression_is_true:
+          - expression_is_true:
               expression: "> 0"
               config:
                 severity: error
@@ -37,7 +37,7 @@ models:
         description: "Average order value for the customer"
         tests:
           - not_null
-          - dbt_utils.expression_is_true:
+          - expression_is_true:
               expression: "> 0"
               config:
                 severity: error
@@ -57,7 +57,7 @@ models:
         description: "Number of days between first and last order"
         tests:
           - not_null
-          - dbt_utils.expression_is_true:
+          - expression_is_true:
               expression: ">= 0"
               config:
                 severity: error
